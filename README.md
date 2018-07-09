@@ -1,2 +1,2 @@
-# tsx_template
+# management_system管理系统
 typsscript_test

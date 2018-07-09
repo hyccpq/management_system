@@ -1,8 +1,8 @@
 {
-  "name": "tsx_template",
+  "name": "management_system",
   "version": "1.0.0",
   "main": "index.tsx",
-  "repository": "https://github.com/hyccpq/tsx_template.git",
+  "repository": "https://github.com/hyccpq/management_system.git",
   "author": "hyccpq <hyccpq@hotmail.com>",
   "license": "MIT",
   "browserslist": [
