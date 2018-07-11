@@ -6,7 +6,7 @@ import { reducers } from './redux';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import Home from './page/home';
 import Layout from './layout'
-import Login from './page/login'
+import Login from './page/loginPage'
 
 import './style/layout.less'
 

@@ -1,0 +1,7 @@
+.nav-title {
+    height: 48px;
+    margin: 0;
+}
+.nav-item {
+    float: right !important; 
+}

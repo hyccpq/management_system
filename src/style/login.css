@@ -1,0 +1,29 @@
+
+.login-card {
+    width: 320px;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-title {
+    padding: 25px 0;
+    text-align: center;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-forgot:after {
+    content: "";
+    clear: both;
+    visibility: hidden;
+    height: 0;
+}
+
+.login-form-button {
+    width: 100%;
+}
