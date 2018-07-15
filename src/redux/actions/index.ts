@@ -1,23 +1,67 @@
 import * as contents from '../constans';
+import { Dispatch } from 'redux';
+import axios from '../../util/axios';
 
-export interface Increment {
-	type: contents.INCREMENT
+export interface LoginSuccess {
+	msg: string;
+	type: contents.LOGIN_SUCCESS;
+	data: {};
 }
 
-export interface Decrement {
-	type: contents.DECREMENT
+export interface LoginFail {
+	type: contents.LOGIN_FAIL;
+	msg: string;
 }
 
-export type EnthusiasmAction = Increment | Decrement;
+export interface LoginError {
+	type: contents.LOGIN_ERROR;
+	msg: string;
+}
 
-export const increment = ():Increment => {
+export type EnthusiasmAction = LoginSuccess | LoginFail | LoginError;
+
+export const loginSuccess = (msg: string = '', data: {} = {}): LoginSuccess => {
 	return {
-		type: contents.INCREMENT
+		msg,
+		type: contents.LOGIN_SUCCESS,
+		data
 	};
 };
 
-export const decrement = ():Decrement => {
+export const loginError = (msg: string): LoginError => {
 	return {
-		type: contents.DECREMENT
+		type: contents.LOGIN_ERROR,
+		msg
+	};
+};
+
+export const loginFail = (msg: string): LoginFail => {
+	return {
+		type: contents.LOGIN_FAIL,
+		msg
+	};
+};
+
+export const login = (userName: string, password: string) => {
+	console.log(userName, password)
+	return async (dispatch: Dispatch<EnthusiasmAction>) => {
+		try {
+			let res = await axios({
+				method: 'post',
+				url: '/manage/user/login.do',
+				params: {
+					username: userName,
+					password
+				}
+			});
+			
+			if (res.data.status === 0) {
+				dispatch(loginSuccess(res.data.msg, res.data));
+			} else {
+				dispatch(loginFail(res.data.msg));
+			}
+		} catch (error) {
+			dispatch(loginError(error.toString()));
+		}
 	};
 };

@@ -13,7 +13,14 @@ const dev = merge(baseConfig, {
 		overlay: true,
 		inline: true,
 		port: 8086,
-		compress: false
+		compress: false,
+		proxy:{
+			'/manage': {
+				target: 'http://admintest.happymmall.com',
+				// pathRewrite: {''},
+				changeOrigin: true
+			}
+		}
 	},
 	plugins: [
 		new webpack.NamedModulesPlugin(),

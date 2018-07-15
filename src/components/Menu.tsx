@@ -8,15 +8,28 @@ export interface MyMenuProps {}
 
 export interface State {
 	current: string;
+	userName: string;
 }
 
 export default class MyMenu extends React.Component<MyMenuProps, State> {
 	public state = {
-		current: ''
+		current: '',
+		userName: ''
 	};
 
 	constructor(props: MyMenuProps) {
 		super(props);
+	}
+
+	componentWillMount () {
+		let userInfoStr:string = window.localStorage.getItem('userInfo');
+		if(userInfoStr) {
+			let userInfo = JSON.parse(userInfoStr);
+			console.dir(userInfo)
+			this.setState({
+				userName: userInfo.data.data.username
+			})
+		}
 	}
 
 	public handleClick = (e) => {
@@ -39,7 +52,7 @@ export default class MyMenu extends React.Component<MyMenuProps, State> {
 				<SubMenu
 					title={
 						<span>
-							<Icon type="setting" />欢迎您，xxx
+							<Icon type="setting" />欢迎您，{this.state.userName? this.state.userName : 'xxx'}
 						</span>
 					}
 					className={MenuStyle.navItem}
