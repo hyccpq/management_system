@@ -5,7 +5,6 @@ import { FormComponentProps } from 'antd/lib/form/Form';
 import { login } from '../redux/actions';
 import { loginFormForgot, loginFormButton } from '../style/login.css';
 import { AppState } from '../redux';
-import {  } from 'react-router-dom';
 
 const FormItem = Form.Item;
 
@@ -25,11 +24,13 @@ export interface ActionsProps {
 
 export interface ReduxProps {
 	userInfo: any;
+	loadState: boolean;
 }
 
 const mapStateToProps = (state: AppState): ReduxProps => {
 	return {
-		userInfo: state.user
+		userInfo: state.user,
+		loadState: state.loadState
 	};
 };
 
@@ -82,7 +83,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 	};
 
 	public render() {
-		const { userInfo } = this.props;
+		const { userInfo, loadState } = this.props;
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<Form onSubmit={this.handleSubmit} className="login-form">

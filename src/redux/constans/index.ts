@@ -12,3 +12,11 @@ export type LOGIN_FAIL = typeof LOGIN_FAIL;
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export type LOGIN_ERROR = typeof LOGIN_ERROR;
+
+export const LOADING_STATE = 'LOADING_STATE';
+export type LOADING_STATE = typeof LOADING_STATE;
+
+
+//Statistic
+export const STATISTIC_SUCCESS = 'STATISTIC_SUCCESS';
+export type STATISTIC_SUCCESS = typeof STATISTIC_SUCCESS;

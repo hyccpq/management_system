@@ -1,11 +1,10 @@
-import { Reducer } from "redux";
-import { EnthusiasmAction } from "../actions";
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ERROR } from "../constans";
+import { Reducer } from 'redux';
+import { EnthusiasmAction } from '../actions';
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ERROR } from '../constans';
 
-const user: Reducer<{}> = (state = {}, action:EnthusiasmAction) => {
-	console.dir(action)
+const user: Reducer<{}> = (state = {}, action: EnthusiasmAction) => {
 	switch (action.type) {
-		case LOGIN_SUCCESS: 
+		case LOGIN_SUCCESS:
 			window.localStorage.setItem('userInfo', JSON.stringify(action));
 			return {
 				msg: action.msg,
@@ -13,13 +12,7 @@ const user: Reducer<{}> = (state = {}, action:EnthusiasmAction) => {
 				success: true
 			};
 
-		case LOGIN_FAIL:
-			return {
-				msg: action.msg,
-				success: false
-			};
-		
-		case LOGIN_ERROR: 
+		case LOGIN_ERROR:
 			return {
 				msg: action.msg,
 				success: false
