@@ -1,17 +1,28 @@
 import * as React from 'react';
 import { Menu, Icon } from 'antd';
+import { loadingState } from '../redux/actions';
+import axios from '../util/axios';
+
 import * as MenuStyle from '../style/menu.css';
+import { connect } from 'react-redux';
 
 const { SubMenu, ItemGroup } = Menu;
 
-export interface MyMenuProps {}
+export interface MyMenuProps extends DispatchProps {}
 
+export interface DispatchProps {
+	loadingState: (state: boolean) => {};
+}
 export interface State {
 	current: string;
 	userName: string;
 }
 
-export default class MyMenu extends React.Component<MyMenuProps, State> {
+const mapDispatchToProps: DispatchProps = {
+	loadingState
+};
+
+class MyMenu extends React.Component<MyMenuProps, State> {
 	public state = {
 		current: '',
 		userName: ''
@@ -21,14 +32,13 @@ export default class MyMenu extends React.Component<MyMenuProps, State> {
 		super(props);
 	}
 
-	componentWillMount () {
-		let userInfoStr:string = window.localStorage.getItem('userInfo');
-		if(userInfoStr) {
+	componentWillMount() {
+		let userInfoStr: string = window.localStorage.getItem('userInfo');
+		if (userInfoStr) {
 			let userInfo = JSON.parse(userInfoStr);
-			console.dir(userInfo)
 			this.setState({
-				userName: userInfo.data.data.username
-			})
+				userName: userInfo.msg.username
+			});
 		}
 	}
 
@@ -37,6 +47,23 @@ export default class MyMenu extends React.Component<MyMenuProps, State> {
 		this.setState({
 			current: e.key
 		});
+	};
+
+	/**
+	 * logout
+	 */
+	public logout = async () => {
+		try {
+			await axios(loadingState)({
+				method: 'post',
+				url: '/user/logout.do'
+			});
+			console.log('登出成功');
+			
+		} catch (error) {
+			console.log(error);
+			
+		}
 	};
 
 	public render(): React.ReactNode {
@@ -52,16 +79,20 @@ export default class MyMenu extends React.Component<MyMenuProps, State> {
 				<SubMenu
 					title={
 						<span>
-							<Icon type="setting" />欢迎您，{this.state.userName? this.state.userName : 'xxx'}
+							<Icon type="setting" />欢迎您，{this.state.userName ? this.state.userName : 'xxx'}
 						</span>
 					}
 					className={MenuStyle.navItem}
 				>
 					<ItemGroup title="用户管理">
-						<Menu.Item key="setting:1">登出</Menu.Item>
+						<Menu.Item key="setting:1" onClick={this.logout}>
+							登出
+						</Menu.Item>
 					</ItemGroup>
 				</SubMenu>
 			</Menu>
 		);
 	}
 }
+
+export default connect(null, mapDispatchToProps)(MyMenu);

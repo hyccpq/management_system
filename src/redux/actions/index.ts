@@ -1,6 +1,7 @@
 import * as contents from '../constans';
 import { Dispatch } from 'redux';
 import axios from '../../util/axios';
+import HttpRequest from './request.tool';
 
 export interface LoginSuccess {
 	msg: string;
@@ -19,8 +20,8 @@ export interface LoadingState {
 }
 
 export interface StatisticSuccess {
-	type: contents.STATISTIC_SUCCESS,
-	data: {}
+	type: contents.STATISTIC_SUCCESS;
+	data: {};
 }
 
 export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess;
@@ -29,10 +30,12 @@ export const loadingState = (state: boolean): LoadingState => {
 	return {
 		type: contents.LOADING_STATE,
 		state
-	}
-}
+	};
+};
 
 export const loginSuccess = (msg: string = '', data: {} = {}): LoginSuccess => {
+	console.log(msg, data);
+	
 	return {
 		msg,
 		type: contents.LOGIN_SUCCESS,
@@ -47,7 +50,13 @@ export const loginError = (msg: string): LoginError => {
 	};
 };
 
-const computedLoadState = (dispatch: Dispatch<EnthusiasmAction>) => (loadState:boolean) => dispatch(loadingState(loadState))
+/**
+ * 登录请求
+ */
+class LoginRequest extends HttpRequest<LoginSuccess, LoginError> {
+	protected successCb = loginSuccess;
+	protected errorCb = loginError;
+}
 
 /**
  * 登录提交状态改变
@@ -55,60 +64,37 @@ const computedLoadState = (dispatch: Dispatch<EnthusiasmAction>) => (loadState:b
  * @param password 密码
  */
 export const login = (userName: string, password: string) => {
-	return async (dispatch: Dispatch<EnthusiasmAction>) => {
-		try {
-			let res = await axios(
-				computedLoadState(dispatch)
-			)({
-				method: 'post',
-				url: '/manage/user/login.do',
-				params: {
-					username: userName,
-					password
-				}
-			});
-			console.log(res);
-			
-			if (res.data.status === 0) {
-				dispatch(loginSuccess(res.data.msg, res.data));
-			} else {
-				throw res.data.msg
-			}
-		} catch (error) {
-			console.log(error);
-			
-			dispatch(loginError(error.toString()));
+	let requestConfig = {
+		method: 'post',
+		url: '/manage/user/login.do',
+		params: {
+			username: userName,
+			password
 		}
 	};
+	let loginRequest: LoginRequest = new LoginRequest(requestConfig);
+	return loginRequest.reqInf;
 };
 
 export const statisticSuccess = (data: {}): StatisticSuccess => {
 	return {
 		type: contents.STATISTIC_SUCCESS,
 		data
-	}
+	};
+};
+
+class StatisticRequest extends HttpRequest<StatisticSuccess, null> {
+	protected successCb = statisticSuccess;
 }
 
 /**
  * 统计获取
  */
 export const statistics = () => {
-	return async (dispatch: Dispatch<EnthusiasmAction>) => {
-		try {
-			let res = await axios(
-				computedLoadState(dispatch)
-			)({
-				method: 'get',
-				url: '/manage/statistic/base_count.do'
-			});
-
-			if(res.data.status === 0) {
-				dispatch(statisticSuccess(res.data.data))
-			} else {
-				throw res.data.msg
-			}
-		} catch (error) {
-			console.log(error);
-		}
+	let requestConfig = {
+		method: 'get',
+		url: '/manage/statistic/base_count.do'
 	}
-}
+	let statisticRequest: StatisticRequest = new StatisticRequest(requestConfig);
+	return statisticRequest.reqInf;
+};

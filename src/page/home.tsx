@@ -38,7 +38,6 @@ class Home extends React.Component<HomeProps, any> {
 
 	public render() {
 		let { statistic } = this.props
-		console.log(statistic);
 		
 		return (
 			<div>

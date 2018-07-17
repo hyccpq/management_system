@@ -19,6 +19,11 @@ const dev = merge(baseConfig, {
 				target: 'http://admintest.happymmall.com',
 				// pathRewrite: {''},
 				changeOrigin: true
+			},
+			'/user': {
+				target: 'http://admintest.happymmall.com',
+				// pathRewrite: {''},
+				changeOrigin: true
 			}
 		}
 	},

@@ -68,9 +68,10 @@ class Login extends React.Component<LoginProps, LoginState> {
 	 */
 	public loginSystem = async () => {
 		await this.props.login(this.state.userName, this.state.password);
+		
 		if (this.props.userInfo.success) {
 			notification.success({
-				message: this.props.userInfo.msg,
+				message: '登陆成功',
 				description: '欢迎回到系统！'
 			});
 			this.props.history.push('/');
