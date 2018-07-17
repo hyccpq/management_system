@@ -60,7 +60,7 @@ class App extends React.Component<any ,State> {
 									<Layout>
 										<Switch>
 											<Route exact path="/" component={Home} />
-											<Redirect from="*" to="/" />
+											{/* <Redirect from="*" to="/" /> */}
 										</Switch>
 									</Layout>
 								)}

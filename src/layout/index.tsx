@@ -4,6 +4,7 @@ import MySide from '../components/Side';
 import { Layout } from 'antd';
 const { Header, Content, Footer } = Layout;
 
+
 export interface LayoutProps {}
 
 export default class MyLayout extends React.Component<LayoutProps, any> {
