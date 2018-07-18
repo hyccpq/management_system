@@ -48,7 +48,7 @@ class MySide extends React.Component<MySideProps, State> {
 						<Icon type="home" />
 						<span>首页</span>
 					</Menu.Item>
-					<Menu.Item key="/index">
+					<Menu.Item key="/uuuu">
 						<Icon type="desktop" />
 						<span>Option 2</span>
 					</Menu.Item>

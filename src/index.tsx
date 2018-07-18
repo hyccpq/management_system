@@ -13,6 +13,7 @@ import { AppState } from './redux';
 
 import './style/layout.less';
 import './style/clear.less';
+import UserList from './page/userList';
 
 const store = configureStore();
 
@@ -60,7 +61,8 @@ class App extends React.Component<any ,State> {
 									<Layout>
 										<Switch>
 											<Route exact path="/" component={Home} />
-											{/* <Redirect from="*" to="/" /> */}
+											<Route exact path="/index/user" component={UserList} />
+											<Redirect from="*" to="/" />
 										</Switch>
 									</Layout>
 								)}

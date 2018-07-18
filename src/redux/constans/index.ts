@@ -20,3 +20,7 @@ export type LOADING_STATE = typeof LOADING_STATE;
 //Statistic
 export const STATISTIC_SUCCESS = 'STATISTIC_SUCCESS';
 export type STATISTIC_SUCCESS = typeof STATISTIC_SUCCESS;
+
+//UserInfo
+export const USERINFO_SUCCESS = 'USERINFO_SUCCESS';
+export type USERINFO_SUCCESS = typeof USERINFO_SUCCESS;

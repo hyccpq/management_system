@@ -1,6 +1,5 @@
 import * as contents from '../constans';
 import { Dispatch } from 'redux';
-import axios from '../../util/axios';
 import HttpRequest from './request.tool';
 
 export interface LoginSuccess {
@@ -24,7 +23,12 @@ export interface StatisticSuccess {
 	data: {};
 }
 
-export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess;
+export interface UserInfoSuccess {
+	type: contents.USERINFO_SUCCESS;
+	data: {};
+}
+
+export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess;
 
 export const loadingState = (state: boolean): LoadingState => {
 	return {
@@ -98,3 +102,27 @@ export const statistics = () => {
 	let statisticRequest: StatisticRequest = new StatisticRequest(requestConfig);
 	return statisticRequest.reqInf;
 };
+
+export const userInfoSuccess = (data: {}): UserInfoSuccess => {
+	return {
+		type: contents.USERINFO_SUCCESS,
+		data
+	}
+}
+
+class UserInfoRequest extends HttpRequest<UserInfoSuccess, null> {
+	protected successCb = userInfoSuccess;
+}
+
+export const userInfoReq = (pageSize: number, pageNum: number) => {
+	let requestConfig = {
+		method: 'get',
+		url: '/manage/user/list.do',
+		params: {
+			pageSize,
+			pageNum
+		}
+	}
+	let userInfoRequest: UserInfoRequest = new UserInfoRequest(requestConfig);
+	return userInfoRequest.reqInf;
+}
