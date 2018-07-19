@@ -11,10 +11,11 @@ console.log(os.cpus().length);
 
 
 module.exports = {
-    entry: path.resolve(__dirname, "../src/index.tsx"),
+    entry: ['babel-polyfill', path.resolve(__dirname, "../src/index.tsx")],
     output: {
         filename: "[name].bundle.js",
-        path: path.resolve(__dirname, "../dist")
+		path: path.resolve(__dirname, "../dist"),
+		publicPath: '/'
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -29,7 +30,9 @@ module.exports = {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {
-            	test: /\.(tsx|ts)?$/,
+				test: /\.(tsx|ts|js(x?))$/,
+				include: [path.resolve('src')],
+                exclude: /node_modules/,
 	            use: [
 	            	// {
 		            // loader: "react-hot-loader/webpack"
@@ -37,22 +40,25 @@ module.exports = {
 	            {
 		            loader: "happypack/loader?id=babel"
 	            },{
-		            loader: "awesome-typescript-loader"
+					loader: "awesome-typescript-loader",
+					options: {
+						useBabel: true
+					}
 	            }]
 	
             },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-	        {
-		        enforce: "pre",
-		        test: /\.js$/,
-		        use: [{
-			        loader: "source-map-loader"
-		        },{
-			        loader: "happypack/loader?id=babel"
-		        }]
+	        // {
+		    //     enforce: "pre",
+		    //     test: /\.js$/,
+		    //     use: [{
+			//         loader: "source-map-loader"
+		    //     },{
+			//         loader: "happypack/loader?id=babel"
+		    //     }]
 	           
-            },
+            // },
 	        
 	        {
 				test: /\.less$/,

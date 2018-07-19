@@ -5,7 +5,9 @@
         "react"
     ],
     "plugins": [
-//        "react-hot-loader/babel",
-        ["import", { "libraryName": "antd", "style": true }]
+        ["import", { "libraryName": "antd", "style": true }],
+        "transform-class-properties",
+        "syntax-dynamic-import",
+        "react-hot-loader/babel"
     ]
 }

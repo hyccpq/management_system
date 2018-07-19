@@ -32,7 +32,9 @@ const mapDispatchToProps: ActionProps = {
 }
 
 class Home extends React.Component<HomeProps, any> {
-	async componentWillMount () {
+	async componentDidMount () {
+		console.error('看看调用了几次');
+		
 		await this.props.getStatistics()
 	}
 

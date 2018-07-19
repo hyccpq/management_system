@@ -17,10 +17,10 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
-        "sourceMap": false,
+        "sourceMap": true,
         "noImplicitAny": false,
-        "module": "es6",
-        "target": "es5",
+        "module": "esnext",
+        "target": "es6",
         "jsx": "preserve",
         "moduleResolution": "node",
         "experimentalDecorators":true,
@@ -28,10 +28,8 @@
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "lib": [
-            "es5",
-            "dom",
-            "dom.iterable",
-            "es2015"
+            "es7",
+            "dom"
         ]
     },
     "include": [

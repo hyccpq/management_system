@@ -10,6 +10,7 @@ const dev = merge(baseConfig, {
 	devServer: {
 		// contentBase: resolve(__dirname, '../dist'),
 		historyApiFallback: true,
+		hot: true,
 		overlay: true,
 		inline: true,
 		port: 8086,

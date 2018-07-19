@@ -25,7 +25,7 @@ export interface StatisticSuccess {
 
 export interface UserInfoSuccess {
 	type: contents.USERINFO_SUCCESS;
-	data: {};
+	data: {list: {}[], total: number};
 }
 
 export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess;
@@ -103,7 +103,7 @@ export const statistics = () => {
 	return statisticRequest.reqInf;
 };
 
-export const userInfoSuccess = (data: {}): UserInfoSuccess => {
+export const userInfoSuccess = (data: {list: {}[], total: number}): UserInfoSuccess => {
 	return {
 		type: contents.USERINFO_SUCCESS,
 		data

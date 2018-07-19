@@ -6,11 +6,7 @@ const userInfoList: Reducer<{}> = (state = {}, action: EnthusiasmAction) => {
 	switch (action.type) {
 		case USERINFO_SUCCESS:
 			console.log(action);
-			return {
-				user: action.data,
-				success: true
-			};
-
+			return action.data
 		default:
 			return state;
 	}
