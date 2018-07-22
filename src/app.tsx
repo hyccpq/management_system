@@ -8,8 +8,8 @@ import Layout from './layout';
 import Login from './page/loginPage';
 import { Store, AnyAction } from 'redux';
 import * as index from './style/index.css';
-import { AppState } from './redux';
-import { hot } from 'react-hot-loader';
+import { AppState } from './redux/reducers';
+import { hot, AppContainer } from 'react-hot-loader';
 
 import './style/layout.less';
 import './style/clear.less';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as home from '../style/home.css';
 import { connect } from 'react-redux';
-import { AppState } from '../redux';
+import { AppState } from '../redux/reducers';
 import { statistics } from '../redux/actions';
 
 export interface HomeProps extends ReduxProps, ActionProps {}

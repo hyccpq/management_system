@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -9,69 +9,70 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length - 1 });
 console.log(os.cpus().length);
 // const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
-
 module.exports = {
-    entry: ['babel-polyfill', path.resolve(__dirname, "../src/index.tsx")],
-    output: {
-        filename: "[name].bundle.js",
-		path: path.resolve(__dirname, "../dist"),
+	entry: [ 
+		'babel-polyfill', 
+		path.resolve(__dirname, '../src/index.tsx') 
+	],
+	output: {
+		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, '../dist'),
 		publicPath: '/'
-    },
+	},
 
-    // Enable sourcemaps for debugging webpack's output.
-    // devtool: "source-map",
+	// Enable sourcemaps for debugging webpack's output.
+	// devtool: "source-map",
 
-    resolve: {
-        // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx", ".js", ".json"]
-    },
+	resolve: {
+		// Add '.ts' and '.tsx' as resolvable extensions.
+		extensions: [ '.ts', '.tsx', '.js', '.json' ]
+	},
 
-    module: {
-        rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            {
+	module: {
+		rules: [
+			// All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+			{
 				test: /\.(tsx|ts|js(x?))$/,
-				include: [path.resolve('src')],
-                exclude: /node_modules/,
-	            use: [
-	            	// {
-		            // loader: "react-hot-loader/webpack"
-	            // },
-	            {
-		            loader: "happypack/loader?id=babel"
-	            },{
-					loader: "awesome-typescript-loader",
-					options: {
-						useBabel: true
-					}
-	            }]
-	
-            },
-
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-	        // {
-		    //     enforce: "pre",
-		    //     test: /\.js$/,
-		    //     use: [{
-			//         loader: "source-map-loader"
-		    //     },{
-			//         loader: "happypack/loader?id=babel"
-		    //     }]
-	           
-            // },
-	        
-	        {
-				test: /\.less$/,
+				include: [ path.resolve('src') ],
+				exclude: /node_modules/,
 				use: [
-					MiniCssExtractPlugin.loader,
-					'happypack/loader?id=less'
+					// {
+					// loader: "react-hot-loader/webpack"
+					// },
+					{
+						loader: 'happypack/loader?id=babel'
+					},
+					{
+						loader: 'awesome-typescript-loader',
+						options: {
+							useBabel: true,
+							transpileOnly: true
+						}
+					}
 				]
+			},
+
+			// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+			// {
+			//     enforce: "pre",
+			//     test: /\.js$/,
+			//     use: [{
+			//         loader: "source-map-loader"
+			//     },{
+			//         loader: "happypack/loader?id=babel"
+			//     }]
+
+			// },
+
+			{
+				test: /\.less$/,
+				use: [ MiniCssExtractPlugin.loader, 'happypack/loader?id=less' ]
 			},
 			{
 				test: /\.css$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					'happypack/loader?id=css',
+					'happypack/loader?id=css'
 					// {
 					// 	loader: 'style-loader'
 					// },
@@ -80,29 +81,29 @@ module.exports = {
 					// }
 				]
 			},
-	        {
-                test: /\.(png|jpg|jpeg|gif|svg)$/,
-                loader: 'url-loader?limit=8192&name=[name].[ext]&publicPath='
-            }
-        ]
-    },
+			{
+				test: /\.(png|jpg|jpeg|gif|svg)$/,
+				loader: 'url-loader?limit=8192&name=[name].[ext]&publicPath='
+			}
+		]
+	},
 
-    // When importing a module whose path matches one of the following, just
-    // assume a corresponding global variable exists and use that instead.
-    // This is important because it allows us to avoid bundling all of our
-    // dependencies, which allows browsers to cache those libraries between builds.
-    // externals: {
-    //     "react": "React",
-    //     "react-dom": "ReactDOM"
-    // },
+	// When importing a module whose path matches one of the following, just
+	// assume a corresponding global variable exists and use that instead.
+	// This is important because it allows us to avoid bundling all of our
+	// dependencies, which allows browsers to cache those libraries between builds.
+	// externals: {
+	//     "react": "React",
+	//     "react-dom": "ReactDOM"
+	// },
 	plugins: [
 		new HappyPack({
 			// 用唯一的标识符 id 来代表当前的 HappyPack 是用来处理一类特定的文件
 			id: 'babel',
 			// 如何处理 .js 文件，用法和 Loader 配置中一样
-			loaders: ['babel-loader?cacheDirectory'],
+			loaders: [ 'babel-loader?cacheDirectory' ],
 			// 使用共享进程池中的子进程去处理任务
-			threadPool: happyThreadPool,
+			threadPool: happyThreadPool
 		}),
 		new HappyPack({
 			id: 'less',
@@ -110,16 +111,16 @@ module.exports = {
 			loaders: [
 				'css-loader',
 				'postcss-loader',
-					{
-						loader: 'less-loader',
-						options: {
-							sourceMap: true,
-							javascriptEnabled: true
-						}
+				{
+					loader: 'less-loader',
+					options: {
+						sourceMap: true,
+						javascriptEnabled: true
 					}
+				}
 			],
 			// 使用共享进程池中的子进程去处理任务
-			threadPool: happyThreadPool,
+			threadPool: happyThreadPool
 		}),
 		new HappyPack({
 			id: 'css',
@@ -132,19 +133,18 @@ module.exports = {
 						namedExport: true,
 						camelCase: true
 					}
-				}, 
+				},
 				'postcss-loader'
 			],
 			// 使用共享进程池中的子进程去处理任务
-			threadPool: happyThreadPool,
+			threadPool: happyThreadPool
 		}),
 		new HtmlWebpackPlugin({
-			template: './src/index.html',
+			template: './src/index.html'
 		}),
 		new MiniCssExtractPlugin({
 			filename: '[name].[hash:8].css',
 			chunkFilename: '[id].[hash:8].css'
-		}),
-		
+		})
 	]
 };

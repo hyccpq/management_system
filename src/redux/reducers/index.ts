@@ -1,9 +1,9 @@
 import { combineReducers, Reducer } from 'redux';
 
-import user from './reducers/user';
-import loadState from './reducers/loading';
-import statistic from './reducers/statistic';
-import userInfoList from './reducers/userInfo';
+import user from './user';
+import loadState from './loading';
+import statistic from './statistic';
+import userInfoList from './userInfo';
 
 export interface AppState {
 	user: {};

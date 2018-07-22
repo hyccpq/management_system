@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
 import { userInfoReq } from '../redux/actions';
-import { AppState } from '../redux';
+import { AppState } from '../redux/reducers';
 
 export interface UserListProps extends UserProps, UserDispatchProps {}
 
@@ -48,8 +48,6 @@ class UserList extends React.Component<UserListProps, UserListState> {
 	};
 
 	componentDidMount() {
-        console.error('diadddddd');
-        
 		this.requestUserList();
 	}
 
@@ -108,7 +106,6 @@ class UserList extends React.Component<UserListProps, UserListState> {
 					}}
 					scroll={{ y: '100%' }}
 				/>
-                {'???'}
 			</div>
 		);
 	}

@@ -4,7 +4,7 @@ import { Form, Icon, Input, Button, Checkbox, notification } from 'antd';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { login } from '../redux/actions';
 import { loginFormForgot, loginFormButton } from '../style/login.css';
-import { AppState } from '../redux';
+import { AppState } from '../redux/reducers';
 
 const FormItem = Form.Item;
 

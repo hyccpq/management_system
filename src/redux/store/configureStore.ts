@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, Store, AnyAction } from 'redux';
-import { reducers, AppState } from '../';
+import { reducers, AppState } from '../reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 declare const module: __WebpackModuleApi.Module;
@@ -13,8 +13,9 @@ const configureStore = (preLoadedState:{} = {}) => {
 		store = createStore(reducers, preLoadedState, applyMiddleware(thunk, logger));
 		
 		if(module.hot) {
-			module.hot.accept('../', () => {
-				store.replaceReducer(reducers);
+			module.hot.accept('../reducers', () => {
+				const nextRootReducer = require('../reducers/index');
+				store.replaceReducer(nextRootReducer);
 			})
 		}
 	}
