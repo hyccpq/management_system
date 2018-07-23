@@ -6,13 +6,35 @@ const { SubMenu } = Menu;
 export interface MySideProps extends RouteComponentProps<MySideProps> {}
 
 export interface State {
-    collapsed: boolean;
+	collapsed: boolean;
+	select: string[];
+	openKey: string[];
 }
 
 class MySide extends React.Component<MySideProps, State> {
     public state = {
-        collapsed: false
-    }
+		collapsed: false,
+		select: [],
+		openKey: []
+	}
+	
+	componentWillMount () {
+		let url: string = window.location.pathname;
+		console.log(url);
+		let urlArr = url.split('/');
+		let selectKey: string[] = [];
+		if(urlArr.length > 1) {
+			for (let i = 1; i < urlArr.length; i++) {
+				selectKey.push('/' + urlArr[i]);
+			}
+		} else {
+			selectKey = ['/']
+		}
+		this.setState({
+			select: selectKey,
+			openKey: [selectKey[0]],
+		})
+	}
 
     private onCollapse = (collapsed: boolean) => {
         this.setState({
@@ -27,14 +49,17 @@ class MySide extends React.Component<MySideProps, State> {
 		console.log(e.key, e.keyPath);
 		let tabUrl: string = ''
 		// console.log(window.location.pathname);
-		for (let i = 0; i < e.keyPath.length; i++) {
+		for (let i = e.keyPath.length - 1; i >= 0 ; i--) {
 			tabUrl += e.keyPath[i];
 		}
+		console.log(tabUrl);
+		
 		this.props.history.push(tabUrl);
 		
 	}
 
 	public render() {
+		let { select, openKey } = this.state;
 		return (
 			<Sider
 				collapsible
@@ -43,7 +68,7 @@ class MySide extends React.Component<MySideProps, State> {
 				style={{ padding: '48px 0' }}
 			>
 				<div className="logo" />
-				<Menu theme="dark" defaultSelectedKeys={[ '/' ]} mode="inline" onClick={ this.pageTab }>
+				<Menu theme="dark" defaultSelectedKeys={select} defaultOpenKeys={openKey} mode="inline" onClick={ this.pageTab }>
 					<Menu.Item key="/">
 						<Icon type="home" />
 						<span>首页</span>
@@ -53,7 +78,7 @@ class MySide extends React.Component<MySideProps, State> {
 						<span>Option 2</span>
 					</Menu.Item>
 					<SubMenu
-						key="/user"
+						key="/userinfo"
 						title={
 							<span>
 								<Icon type="user" />
@@ -64,15 +89,15 @@ class MySide extends React.Component<MySideProps, State> {
 						<Menu.Item key="/index">用户管理</Menu.Item>
 					</SubMenu>
 					<SubMenu
-						key="sub2"
+						key="/product"
 						title={
 							<span>
 								<Icon type="team" />
-								<span>Team</span>
+								<span>商品</span>
 							</span>
 						}
 					>
-						<Menu.Item key="6">Team 1</Menu.Item>
+						<Menu.Item key="/itemList">商品列表</Menu.Item>
 						<Menu.Item key="8">Team 2</Menu.Item>
 					</SubMenu>
 					<Menu.Item key="9">

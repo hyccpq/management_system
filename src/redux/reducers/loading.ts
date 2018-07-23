@@ -3,6 +3,7 @@ import { EnthusiasmAction } from "../actions";
 import { LOADING_STATE } from "../constans";
 
 const loading: Reducer<boolean> = (state = false, action:EnthusiasmAction) => {
+	console.log(action);
 	switch (action.type) {
 		case LOADING_STATE: 
 			return action.state;

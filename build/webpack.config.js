@@ -9,11 +9,12 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length - 1 });
 console.log(os.cpus().length);
 // const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
+const isDev = process.env.NODE_ENV !== 'production';
+console.log(isDev);
+
+
 module.exports = {
-	entry: [ 
-		'babel-polyfill', 
-		path.resolve(__dirname, '../src/index.tsx') 
-	],
+	entry: [ 'babel-polyfill', path.resolve(__dirname, '../src/index.tsx') ],
 	output: {
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, '../dist'),
@@ -66,12 +67,16 @@ module.exports = {
 
 			{
 				test: /\.less$/,
-				use: [ MiniCssExtractPlugin.loader, 'happypack/loader?id=less' ]
+				use: [ 
+					isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 
+					'happypack/loader?id=less' 
+				]
 			},
 			{
 				test: /\.css$/,
+				exclude: /^node_modules$/,
 				use: [
-					MiniCssExtractPlugin.loader,
+					isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
 					'happypack/loader?id=css'
 					// {
 					// 	loader: 'style-loader'

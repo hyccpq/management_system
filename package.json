@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "dev": "webpack-dev-server --config build/webpack.config.dev.js --open --progress",
-    "build": "webpack --config build/webpack.config.prod.js --progress"
+    "build": "webpack --config build/webpack.config.prod.js --progress NODE_ENV=production"
   },
   "devDependencies": {
     "autoprefixer": "^8.6.4",

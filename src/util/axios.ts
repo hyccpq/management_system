@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 let http: AxiosInstance = axios.create({
 	baseURL: `${location.protocol}//${location.hostname}:${location.port}`,
-	timeout: 5000,
+	timeout: 60000,
 	data: {}
 });
 
@@ -12,7 +12,8 @@ function _request(param: {} = {}, fn: Function = () => {}) {
 	})
 		.then((res) => {
 			const { msg, status } = res.data;
-
+			console.log(res.data);
+			
 			if (status === 10) {
 				window.location.href = '/login';
 

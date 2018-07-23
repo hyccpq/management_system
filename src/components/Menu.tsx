@@ -5,10 +5,11 @@ import axios from '../util/axios';
 
 import * as MenuStyle from '../style/menu.css';
 import { connect } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const { SubMenu, ItemGroup } = Menu;
 
-export interface MyMenuProps extends DispatchProps {}
+export interface MyMenuProps extends DispatchProps, RouteComponentProps<MyMenuProps> {}
 
 export interface DispatchProps {
 	loadingState: (state: boolean) => {};
@@ -21,6 +22,7 @@ export interface State {
 const mapDispatchToProps: DispatchProps = {
 	loadingState
 };
+
 
 class MyMenu extends React.Component<MyMenuProps, State> {
 	public state = {
@@ -59,6 +61,7 @@ class MyMenu extends React.Component<MyMenuProps, State> {
 				url: '/user/logout.do'
 			});
 			console.log('登出成功');
+			this.props.history.push('/login');
 			
 		} catch (error) {
 			console.log(error);
@@ -95,4 +98,4 @@ class MyMenu extends React.Component<MyMenuProps, State> {
 	}
 }
 
-export default connect(null, mapDispatchToProps)(MyMenu);
+export default connect(null, mapDispatchToProps)(withRouter(MyMenu));

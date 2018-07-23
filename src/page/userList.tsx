@@ -26,6 +26,7 @@ class UserList extends React.Component<UserListProps, UserListState> {
 			{
 				title: '编号',
 				dataIndex: 'id',
+				key: 'id',
 				width: 100
 			},
 			{
@@ -51,32 +52,20 @@ class UserList extends React.Component<UserListProps, UserListState> {
 		this.requestUserList();
 	}
 
-    count = 1;
-
 	private async requestUserList(currentPage: number = 1, pageSize: number = 10) {
 		try {
 			await this.props.userInfoReq(pageSize, currentPage);
-            
-			console.log('到底多少次调用',this.props.userData);
-
 			let preListData = this.props.userData.list;
-			let listData: {}[] = [];
-            // if(!Array.isArray(preListData)) {
-            //     return;
-            // }
-			for (let i = 0; i < preListData.length; i++) {
-				let item = preListData[i];
-				item.key = i;
-				listData.push(item);
-			}
+            if(!Array.isArray(preListData)) {
+                return;
+            }
 			this.setState({
-				data: listData,
+				data: preListData,
 				total: this.props.userData.total
 			});
 			console.log(this.state.data);
 		} catch (error) {
             console.log(error);
-            
         }
 	}
 
@@ -91,19 +80,20 @@ class UserList extends React.Component<UserListProps, UserListState> {
 	};
 
 	public render() {
-		let { total } = this.state;
+		let { total, columns, data } = this.state;
 		return (
 			<div>
 				<h1>用户列表</h1>
 				<Table
-					columns={this.state.columns}
-					dataSource={this.state.data}
+					columns={columns}
+					dataSource={data}
 					pagination={{
 						total,
 						showSizeChanger: true,
 						onShowSizeChange: this.onShowSizeChange,
 						onChange: this.pageChange
 					}}
+					rowKey="id"
 					scroll={{ y: '100%' }}
 				/>
 			</div>

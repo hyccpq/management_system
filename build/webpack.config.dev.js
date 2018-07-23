@@ -9,24 +9,26 @@ const dev = merge(baseConfig, {
 	mode: 'development',
 	devtool: 'cheap-module-eval-source-map',
 	devServer: {
-		contentBase: resolve(__dirname, '../dist'),
+		// contentBase: resolve(__dirname, '../dist'),
+		host: '0.0.0.0',
 		historyApiFallback: true,
 		publicPath: '/',
-		hot: true,
+		// hot: true,
 		hotOnly: true,
 		overlay: true,
 		inline: true,
 		port: 8086,
+		watchContentBase: true,
 		proxy:{
 			'/manage': {
 				target: 'http://admintest.happymmall.com',
-				// pathRewrite: {''},
-				changeOrigin: true
+				changeOrigin: true,
+				secure: false
 			},
 			'/user': {
 				target: 'http://admintest.happymmall.com',
-				// pathRewrite: {''},
-				changeOrigin: true
+				changeOrigin: true,
+				secure: false
 			}
 		}
 	},

@@ -23,12 +23,17 @@ export interface StatisticSuccess {
 	data: {};
 }
 
+export interface ProductListSuccess {
+	type: contents.PRODUCT_LIST_SUCCESS;
+	data: {};
+}
+
 export interface UserInfoSuccess {
 	type: contents.USERINFO_SUCCESS;
 	data: {list: {}[], total: number};
 }
 
-export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess;
+export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess | ProductListSuccess;
 
 export const loadingState = (state: boolean): LoadingState => {
 	return {
@@ -125,4 +130,28 @@ export const userInfoReq = (pageSize: number, pageNum: number) => {
 	}
 	let userInfoRequest: UserInfoRequest = new UserInfoRequest(requestConfig);
 	return userInfoRequest.reqInf;
+}
+
+export const productListSuccess = (data: {list: {}[], total: number}): ProductListSuccess => {
+	return {
+		type: contents.PRODUCT_LIST_SUCCESS,
+		data
+	}
+}
+
+class ProductListRequest extends HttpRequest<ProductListSuccess, null> {
+	protected successCb = productListSuccess;
+}
+
+export const productListReq = (pageSize: number, pageNum: number) => {
+	let requestConfig = {
+		method: 'get',
+		url: '/manage/product/list.do',
+		params: {
+			pageSize,
+			pageNum
+		}
+	}
+	let productListRequest: ProductListRequest = new ProductListRequest(requestConfig);
+	return productListRequest.reqInf;
 }
