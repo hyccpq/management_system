@@ -1,5 +1,4 @@
 import * as React from 'react';
-import configureStore from './redux/store/configureStore';
 import { Spin } from 'antd';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import Home from './page/home';

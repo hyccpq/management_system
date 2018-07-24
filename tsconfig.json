@@ -32,6 +32,10 @@
             "dom"
         ]
     },
+    "exclude": [
+        "node_modules",
+        "@types/*"
+    ],
     "include": [
         "./src/**/*"
     ]

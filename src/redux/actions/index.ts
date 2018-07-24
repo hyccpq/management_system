@@ -1,5 +1,4 @@
 import * as contents from '../constans';
-import { Dispatch } from 'redux';
 import HttpRequest from './request.tool';
 
 export interface LoginSuccess {

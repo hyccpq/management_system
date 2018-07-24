@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, notification } from 'antd';
 import { connect } from 'react-redux';
 import { productListReq } from '../redux/actions';
 import { AppState } from '../redux/reducers';
+import axios from '../util/axios';
 
 export interface ProductListState {
 	data: {}[];
 	columns: {}[];
 	total: number;
+	currentPage: number;
+	currentSize: number;
 }
 
 export interface ProductListProps extends StateProps, DispatchProps {}
@@ -34,6 +37,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 	readonly state: ProductListState = {
 		data: [],
 		total: 0,
+		currentPage: 1,
+		currentSize: 10,
 		columns: [
 			{
 				title: '编号',
@@ -59,19 +64,32 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			{
 				title: '状态',
 				dataIndex: 'status',
-				render: (status: number) => (
+				render: (status: number, { id }: { id: number }) => (
 					<span>
 						{status === 1 ? (
 							<span>
-								在售 <br/>
-								<Button type="primary" size="small">
+								在售 <br />
+								<Button
+									type="primary"
+									size="small"
+									onClick={() => {
+										this.setProductStatus(id, 2);
+									}}
+								>
 									下线
 								</Button>
 							</span>
 						) : (
 							<span>
-								已下架 <br/>
-								<Button size="small">上线</Button>
+								已下架 <br />
+								<Button
+									size="small"
+									onClick={() => {
+										this.setProductStatus(id, 1);
+									}}
+								>
+									上线
+								</Button>
 							</span>
 						)}
 					</span>
@@ -101,13 +119,50 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		this.requestList();
 	}
 
+	/**
+	 * setProductStatus
+	 */
+	public setProductStatus = async (id: number, status: number) => {
+		try {
+			let res = await axios({
+				method: 'post',
+				url: '/manage/product/set_sale_status.do',
+				params: {
+					productId: id,
+					status
+				}
+			});
+			console.log(res);
+			if (res.data.status === 0) {
+				await this.requestList(this.state.currentSize, this.state.currentPage);
+				notification.success({
+					message: '成功',
+					description: res.data.data
+				})
+			} else {
+				notification.error({
+					message: '错误',
+					description: res.data.data
+				});
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	private pageChange = (page: number, pageSize: number) => {
-		console.log(page, pageSize);
+		this.setState({
+			currentPage: page,
+			currentSize: pageSize
+		})
 		this.requestList(pageSize, page);
 	};
 
 	private onShowSizeChange = (current: number, pageSize: number) => {
-		console.log(current, pageSize);
+		this.setState({
+			currentPage: current,
+			currentSize: pageSize
+		})
 		this.requestList(pageSize, current);
 	};
 
