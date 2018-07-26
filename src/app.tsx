@@ -13,6 +13,7 @@ import UserList from './page/userList';
 import ProductList from './page/productList';
 import { connect } from 'react-redux';
 import { AppState } from './redux/reducers';
+import productShow from './page/productShow';
 
 export interface AppProps {
 	loadState: boolean;
@@ -32,6 +33,7 @@ class App extends React.Component<AppProps, State> {
 				<Router>
 					<Switch>
 						<Route path="/login" component={Login} />
+						<Route path="/product_show/:productId/:title" component={productShow} />
 						<Route
 							path="/"
 							render={(props) => (

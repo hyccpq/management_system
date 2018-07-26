@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { productListReq } from '../redux/actions';
 import { AppState } from '../redux/reducers';
 import axios from '../util/axios';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 export interface ProductListState {
 	data: {}[];
@@ -13,7 +14,7 @@ export interface ProductListState {
 	currentSize: number;
 }
 
-export interface ProductListProps extends StateProps, DispatchProps {}
+export interface ProductListProps extends StateProps, DispatchProps, RouteComponentProps<ProductListProps> {}
 
 export interface StateProps {
 	productList: any;
@@ -49,7 +50,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			{
 				title: '商品名',
 				dataIndex: 'name',
-				width: 100
+				width: 200
 			},
 			{
 				title: '价格',
@@ -64,7 +65,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			{
 				title: '状态',
 				dataIndex: 'status',
-				render: (status: number, { id }: { id: number }) => (
+				width: 80,
+				render: (status: number, { id }: { id: number}) => (
 					<span>
 						{status === 1 ? (
 							<span>
@@ -98,9 +100,12 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			{
 				title: '操作',
 				dataIndex: 'categoryId',
-				render: (categoryId: number) => (
+				width: 180,
+				render: (categoryId: number, { id, name }: { id: number, name: string }) => (
 					<span>
-						<Button size="small">查看</Button>
+						<Button size="small" onClick={
+							() => this.gotoProductShow(id, name)
+						}>查看</Button>
 						<Button size="small">编辑</Button>
 						<Button type="danger" size="small">
 							删除
@@ -178,6 +183,13 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		});
 	}
 
+	/**
+	 * gotoProductShow
+	 */
+	public gotoProductShow(productId: number, title: string) {
+		this.props.history.push(`/product_show/${productId}/${title}`);
+	}
+
 	public render() {
 		let { data, columns, total } = this.state;
 		return (
@@ -200,4 +212,4 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProductList));

@@ -4,6 +4,7 @@ import loadState from './loading';
 import statistic from './statistic';
 import userInfoList from './userInfo';
 import productList from './productList';
+import productShow from './productShow';  
 
 export interface AppState {
 	user: {};
@@ -11,6 +12,7 @@ export interface AppState {
     statistic: {};
     userInfoList: {};
     productList: {};
+    productShow: {};
 }
 
 export const reducers: Reducer<AppState> = combineReducers<AppState>({
@@ -18,5 +20,6 @@ export const reducers: Reducer<AppState> = combineReducers<AppState>({
     loadState,
     statistic,
     userInfoList,
-    productList
+    productList,
+    productShow
 });

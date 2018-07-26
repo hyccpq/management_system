@@ -27,12 +27,17 @@ export interface ProductListSuccess {
 	data: {};
 }
 
+export interface ProductShowSuccess {
+	type: contents.PRODUCT_SHOW_SUCCESS;
+	data: {};
+}
+
 export interface UserInfoSuccess {
 	type: contents.USERINFO_SUCCESS;
 	data: {list: {}[], total: number};
 }
 
-export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess | ProductListSuccess;
+export type EnthusiasmAction = LoginSuccess | LoginError | LoadingState | StatisticSuccess | UserInfoSuccess | ProductListSuccess | ProductShowSuccess;
 
 export const loadingState = (state: boolean): LoadingState => {
 	return {
@@ -118,6 +123,11 @@ class UserInfoRequest extends HttpRequest<UserInfoSuccess, null> {
 	protected successCb = userInfoSuccess;
 }
 
+/**
+ * 查询用户列表信息
+ * @param pageSize 查询条目
+ * @param pageNum 查询页数
+ */
 export const userInfoReq = (pageSize: number, pageNum: number) => {
 	let requestConfig = {
 		method: 'get',
@@ -142,6 +152,11 @@ class ProductListRequest extends HttpRequest<ProductListSuccess, null> {
 	protected successCb = productListSuccess;
 }
 
+/**
+ * 查询产品列表
+ * @param pageSize 条目数	
+ * @param pageNum 页数
+ */
 export const productListReq = (pageSize: number, pageNum: number) => {
 	let requestConfig = {
 		method: 'get',
@@ -153,4 +168,28 @@ export const productListReq = (pageSize: number, pageNum: number) => {
 	}
 	let productListRequest: ProductListRequest = new ProductListRequest(requestConfig);
 	return productListRequest.reqInf;
+}
+
+
+export const productShowSuccess = (data: {list: {}[], total: number}): ProductShowSuccess => {
+	return {
+		type: contents.PRODUCT_SHOW_SUCCESS,
+		data
+	}
+}
+
+class ProductShowRequest extends HttpRequest<ProductShowSuccess, null> {
+	protected successCb = productShowSuccess;
+}
+
+export const productShowReq = (productId: string) => {
+	let requestConfig = {
+		method: 'get',
+		url: '/manage/product/detail.do',
+		params: {
+			productId
+		}
+	}
+	let productShowRequest: ProductShowRequest = new ProductShowRequest(requestConfig);
+	return productShowRequest.reqInf;
 }
