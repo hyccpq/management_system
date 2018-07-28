@@ -29,6 +29,20 @@
   dependencies:
     axios "*"
 
+"@types/braft-editor@^1.9.0":
+  version "1.9.0"
+  resolved "http://registry.npm.taobao.org/@types/braft-editor/download/@types/braft-editor-1.9.0.tgz#41ac9db74f7696dd78838bce5775d5c6c3d33f06"
+  dependencies:
+    "@types/draft-js" "*"
+    "@types/react" "*"
+
+"@types/draft-js@*":
+  version "0.10.23"
+  resolved "http://registry.npm.taobao.org/@types/draft-js/download/@types/draft-js-0.10.23.tgz#c313e5e2d6d1b707c18317882b9415975890f3bd"
+  dependencies:
+    "@types/react" "*"
+    immutable "^3.8.1"
+
 "@types/history@*":
   version "4.6.2"
   resolved "http://registry.npm.taobao.org/@types/history/download/@types/history-4.6.2.tgz#12cfaba693ba20f114ed5765467ff25fdf67ddb0"
@@ -43,6 +57,13 @@
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
+
+"@types/react-loadable@^5.4.0":
+  version "5.4.0"
+  resolved "http://registry.npm.taobao.org/@types/react-loadable/download/@types/react-loadable-5.4.0.tgz#7a4f0673de07473525ab27959cf4c2601e25f37f"
+  dependencies:
+    "@types/react" "*"
+    "@types/webpack" "*"
 
 "@types/react-router-dom@^4.2.7":
   version "4.3.0"
@@ -83,9 +104,28 @@
   dependencies:
     redux "*"
 
+"@types/tapable@*":
+  version "1.0.4"
+  resolved "http://registry.npm.taobao.org/@types/tapable/download/@types/tapable-1.0.4.tgz#b4ffc7dc97b498c969b360a41eee247f82616370"
+
+"@types/uglify-js@*":
+  version "3.0.3"
+  resolved "http://registry.npm.taobao.org/@types/uglify-js/download/@types/uglify-js-3.0.3.tgz#801a5ca1dc642861f47c46d14b700ed2d610840b"
+  dependencies:
+    source-map "^0.6.1"
+
 "@types/webpack-env@^1.13.6":
   version "1.13.6"
   resolved "http://registry.npm.taobao.org/@types/webpack-env/download/@types/webpack-env-1.13.6.tgz#128d1685a7c34d31ed17010fc87d6a12c1de6976"
+
+"@types/webpack@*":
+  version "4.4.8"
+  resolved "http://registry.npm.taobao.org/@types/webpack/download/@types/webpack-4.4.8.tgz#3af86780489a355e05f3de26b553537afc026acb"
+  dependencies:
+    "@types/node" "*"
+    "@types/tapable" "*"
+    "@types/uglify-js" "*"
+    source-map "^0.6.0"
 
 "@webassemblyjs/ast@1.5.13":
   version "1.5.13"
@@ -1332,6 +1372,14 @@ braces@^2.3.0, braces@^2.3.1:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
+braft-editor@^1.9.8:
+  version "1.9.8"
+  resolved "http://registry.npm.taobao.org/braft-editor/download/braft-editor-1.9.8.tgz#8c1e317201dbec3f786ac07e720ecc5b8c6e099f"
+  dependencies:
+    draft-convert "^2.0.0"
+    draft-js "^0.10.3"
+    draftjs-utils "^0.8.7"
+
 brorand@^1.0.1:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/brorand/download/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
@@ -1934,6 +1982,13 @@ create-react-context@^0.2.2:
     fbjs "^0.8.0"
     gud "^1.0.0"
 
+cross-env@^5.2.0:
+  version "5.2.0"
+  resolved "http://registry.npm.taobao.org/cross-env/download/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
+  dependencies:
+    cross-spawn "^6.0.5"
+    is-windows "^1.0.0"
+
 cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "http://registry.npm.taobao.org/cross-spawn/download/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -2428,13 +2483,24 @@ dot-prop@^4.1.1:
   dependencies:
     is-obj "^1.0.0"
 
-draft-js@^0.10.0, draft-js@~0.10.0:
+draft-convert@^2.0.0:
+  version "2.1.2"
+  resolved "http://registry.npm.taobao.org/draft-convert/download/draft-convert-2.1.2.tgz#00624b40fc80dca320c4e693a5fd21debb78206d"
+  dependencies:
+    immutable "~3.7.4"
+    invariant "^2.2.1"
+
+draft-js@^0.10.0, draft-js@^0.10.3, draft-js@~0.10.0:
   version "0.10.5"
   resolved "http://registry.npm.taobao.org/draft-js/download/draft-js-0.10.5.tgz#bfa9beb018fe0533dbb08d6675c371a6b08fa742"
   dependencies:
     fbjs "^0.8.15"
     immutable "~3.7.4"
     object-assign "^4.1.0"
+
+draftjs-utils@^0.8.7:
+  version "0.8.8"
+  resolved "http://registry.npm.taobao.org/draftjs-utils/download/draftjs-utils-0.8.8.tgz#5835daed95f59d3ee1f96fdcbbb9809772c86490"
 
 duplexer@^0.1.1:
   version "0.1.1"
@@ -3382,7 +3448,7 @@ image-size@~0.5.0:
   version "0.5.5"
   resolved "http://registry.npm.taobao.org/image-size/download/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
 
-immutable@^3.7.4:
+immutable@^3.7.4, immutable@^3.8.1:
   version "3.8.2"
   resolved "http://registry.npm.taobao.org/immutable/download/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
@@ -3749,7 +3815,7 @@ is-utf8@^0.2.0:
   version "0.2.1"
   resolved "http://registry.npm.taobao.org/is-utf8/download/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
 
-is-windows@^1.0.2:
+is-windows@^1.0.0, is-windows@^1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/is-windows/download/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
 
@@ -5996,6 +6062,12 @@ react-lazy-load@^3.0.12:
 react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "http://registry.npm.taobao.org/react-lifecycles-compat/download/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+
+react-loadable@^5.4.0:
+  version "5.4.0"
+  resolved "http://registry.npm.taobao.org/react-loadable/download/react-loadable-5.4.0.tgz#3b6b7d51121a7868fd155be848a36e02084742c9"
+  dependencies:
+    prop-types "^15.5.0"
 
 react-redux@^5.0.7:
   version "5.0.7"

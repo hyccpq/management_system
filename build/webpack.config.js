@@ -10,12 +10,13 @@ console.log(os.cpus().length);
 // const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const isDev = process.env.NODE_ENV !== 'production';
-console.log(isDev);
+console.log(isDev, process.env.NODE_ENV);
 
 
 module.exports = {
 	entry: [ 'babel-polyfill', path.resolve(__dirname, '../src/index.tsx') ],
 	output: {
+		chunkFilename: '[name].[hash:8].chunks.js',
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, '../dist'),
 		publicPath: '/'
@@ -74,7 +75,6 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				exclude: /^node_modules$/,
 				use: [
 					isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
 					'happypack/loader?id=css'
@@ -84,7 +84,16 @@ module.exports = {
 					// {
 					// 	loader: 'css-loader'
 					// }
-				]
+				],
+				exclude: [path.resolve(__dirname, '..' , 'node_modules')]
+			},
+			{
+				test: /\.css$/,
+				use: [
+					isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+					'happypack/loader?id=modules_css'
+				],
+				include: [path.resolve(__dirname, '..' , 'node_modules')]
 			},
 			{
 				test: /\.(png|jpg|jpeg|gif|svg)$/,
@@ -139,6 +148,16 @@ module.exports = {
 						camelCase: true
 					}
 				},
+				'postcss-loader'
+			],
+			// 使用共享进程池中的子进程去处理任务
+			threadPool: happyThreadPool
+		}),
+		new HappyPack({
+			id: 'modules_css',
+			// 如何处理 .css 文件，用法和 Loader 配置中一样
+			loaders: [
+				'css-loader',
 				'postcss-loader'
 			],
 			// 使用共享进程池中的子进程去处理任务
