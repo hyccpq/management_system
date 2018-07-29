@@ -3,6 +3,7 @@ import * as home from '../style/home.css';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
 import { statistics } from '../redux/actions';
+import { Link } from 'react-router-dom';
 
 export interface HomeProps extends ReduxProps, ActionProps {}
 
@@ -33,8 +34,6 @@ const mapDispatchToProps: ActionProps = {
 
 class Home extends React.Component<HomeProps, any> {
 	async componentDidMount () {
-		console.error('看看调用了几次');
-		
 		await this.props.getStatistics()
 	}
 
@@ -46,8 +45,10 @@ class Home extends React.Component<HomeProps, any> {
 				<h1>首页</h1>
 				<ul className={home.numList}>
 					<li className={home.numItem}>
-						<p>{statistic.userCount ? statistic.userCount.toString() : '--'}</p>
-						<h3>用户总数</h3>
+						<Link to='/userinfo/index'>
+							<p>{statistic.userCount ? statistic.userCount.toString() : '--'}</p>
+							<h3>用户总数</h3>
+						</Link>
 					</li>
 					<li className={home.numItem}>
 						<p>{statistic.productCount ? statistic.productCount.toString() : '--'}</p>

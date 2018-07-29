@@ -13,6 +13,7 @@ export default class ProductEditor extends React.Component<ProductEditorProps, P
 	public render() {
 		return (
 			<div>
+				<h1>产品信息编辑</h1>
 				<Editor />
 			</div>
 		);
