@@ -5,6 +5,7 @@ import 'braft-editor/dist/braft.css';
 import { FormComponentProps } from 'antd/lib/form';
 import * as editorStyle from '../style/editor.css';
 import { UploadFile } from 'antd/lib/upload/interface';
+import axios from 'axios';
 
 export interface EditorProps extends FormComponentProps {}
 
@@ -64,13 +65,40 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		console.log(rawContent);
 	};
 
+	public async uploadImage(defaultValue) {
+		let fd: FormData = new FormData();
+		fd.append('upload_file', defaultValue.file);
+		console.log(defaultValue.file, fd);
+		
+		// let res  = await axios.post()
+		let res = await axios({
+			url: '/manage/product/richtext_img_upload.do',
+			headers: { 
+				'Content-Type': 'multipart/form-data' 
+			},
+			method: 'post',
+			data: fd
+		})
+		console.log(res);
+		
+	}
+
 	public render() {
 		const editorProps: {} = {
 			height: 500,
 			contentFormat: 'html',
 			initialContent: '<p>Hello World!</p>',
 			onChange: this.handleChange,
-			onRawChange: this.handleRawChange
+			onRawChange: this.handleRawChange,
+			media: {
+				allowPasteImage: false, // 是否允许直接粘贴剪贴板图片（例如QQ截图等）到编辑器
+				image: true, // 开启图片插入功能
+				video: false, // 开启视频插入功能
+				audio: false, // 开启音频插入功能
+				uploadFn: (params) => {
+					this.uploadImage(params);
+				} // 指定上传函数，说明见下文
+			}
 		};
 
 		const { getFieldDecorator } = this.props.form;
@@ -124,9 +152,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					<FormItem {...formItemLayout} label="上传图片">
 						<div className="clearfix">
 							<Upload
-								action="/manage/product/upload.do"
+								action="manage/product/upload.do"
+								name="upload_file"
 								listType="picture-card"
 								fileList={fileList}
+								withCredentials={true}
 								onPreview={this.handlePreview}
 								onChange={this.updateHandleChange}
 							>
