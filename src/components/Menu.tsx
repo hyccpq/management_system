@@ -34,7 +34,7 @@ class MyMenu extends React.Component<MyMenuProps, State> {
 		super(props);
 	}
 
-	componentWillMount() {
+	componentDidMount () {
 		let userInfoStr: string = window.localStorage.getItem('userInfo');
 		if (userInfoStr) {
 			let userInfo = JSON.parse(userInfoStr);

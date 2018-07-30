@@ -14,4 +14,5 @@ class Greeter {
     }
 }
 
-console.log(new Greeter("world"));
+let greeter: Greeter = new Greeter("world");
+console.log(greeter.hello);

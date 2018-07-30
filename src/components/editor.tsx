@@ -1,25 +1,43 @@
 import * as React from 'react';
 import BraftEditor from 'braft-editor';
-import { Form, Select, InputNumber, Switch, Radio, Slider, Button, Upload, Icon, Rate, Input } from 'antd';
+import { Form, Select, InputNumber, Radio, Modal, Button, Upload, Icon, Rate, Input } from 'antd';
 import 'braft-editor/dist/braft.css';
 import { FormComponentProps } from 'antd/lib/form';
 import * as editorStyle from '../style/editor.css';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 export interface EditorProps extends FormComponentProps {}
 
-export interface EditorState {}
+export interface EditorState {
+	previewVisible: boolean;
+	previewImage: string;
+	fileList: UploadFile[];
+}
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 
 class Editor extends React.Component<EditorProps, EditorState> {
-	readonly state = {};
+	readonly state: EditorState = {
+		previewVisible: false,
+		previewImage: '',
+		fileList: []
+	};
 
 	constructor(props: EditorProps) {
 		super(props);
 	}
+
+	public handleCancel = () => this.setState({ previewVisible: false });
+
+	public handlePreview = (file: { url?: string; thumbUrl?: string }) => {
+		this.setState({
+			previewImage: file.url || file.thumbUrl,
+			previewVisible: true
+		});
+	};
+
+	public updateHandleChange = ({ fileList }: { fileList: EditorState['fileList'] }) => this.setState({ fileList });
 
 	public handleSubmit = (e): void => {
 		e.preventDefault();
@@ -61,6 +79,15 @@ class Editor extends React.Component<EditorProps, EditorState> {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 14 }
 		};
+
+		const { previewVisible, previewImage, fileList } = this.state;
+		const uploadButton = (
+			<div>
+				<Icon type="plus" />
+				<div className="ant-upload-text">上传</div>
+			</div>
+		);
+
 		return (
 			<div>
 				<Form onSubmit={this.handleSubmit}>
@@ -95,19 +122,19 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					</FormItem>
 
 					<FormItem {...formItemLayout} label="上传图片">
-						<div className="dropbox">
-							{getFieldDecorator('dragger', {
-								valuePropName: 'fileList',
-								getValueFromEvent: this.normFile
-							})(
-								<Upload.Dragger name="files" action="/upload.do">
-									<p className="ant-upload-drag-icon">
-										<Icon type="inbox" />
-									</p>
-									<p className="ant-upload-text">点击或者拖到此处上传</p>
-									<p className="ant-upload-hint">Support for a single or bulk upload.</p>
-								</Upload.Dragger>
-							)}
+						<div className="clearfix">
+							<Upload
+								action="/manage/product/upload.do"
+								listType="picture-card"
+								fileList={fileList}
+								onPreview={this.handlePreview}
+								onChange={this.updateHandleChange}
+							>
+								{fileList.length >= 3 ? null : uploadButton}
+							</Upload>
+							<Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+								<img alt="example" style={{ width: '100%' }} src={previewImage} />
+							</Modal>
 						</div>
 					</FormItem>
 					<FormItem {...formItemLayout} label="详细信息">

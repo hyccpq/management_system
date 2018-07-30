@@ -12,15 +12,18 @@ export interface State {
 }
 
 class MySide extends React.Component<MySideProps, State> {
-    public state = {
+    readonly state: State = {
 		collapsed: false,
 		select: [],
 		openKey: []
 	}
 	
-	componentWillMount () {
+	constructor (props) {
+		super(props);
+	}
+
+	componentDidMount() {
 		let url: string = window.location.pathname;
-		console.log(url);
 		let urlArr = url.split('/');
 		let selectKey: string[] = [];
 		if(urlArr.length > 1) {
