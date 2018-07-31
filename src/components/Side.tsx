@@ -76,7 +76,7 @@ class MySide extends React.Component<MySideProps, State> {
 						<Icon type="home" />
 						<span>首页</span>
 					</Menu.Item>
-					<Menu.Item key="/product_editor">
+					<Menu.Item key="/product_create">
 						<Icon type="desktop" />
 						<span>新建 & 编辑产品信息</span>
 					</Menu.Item>

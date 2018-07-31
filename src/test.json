@@ -1,0 +1,12 @@
+{
+	"categoryId":"1",
+	"name":"三星洗衣机" ,
+	"subtitle":"三星大促销",
+	"mainImage":"sss.jpg", 
+	"subImages":"test.jpg",  
+	"detail":"detailtext ",
+	"price":"1000",
+	"stock":"100",
+	"status":"1",
+	"id":"3"
+}

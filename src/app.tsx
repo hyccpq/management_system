@@ -50,7 +50,8 @@ class App extends React.Component<AppProps, State> {
 								<Layout>
 									<Switch>
 										<Route exact path="/" component={Home} />
-										<Route path="/product_editor" component={ProductEditor} />
+										<Route exact path="/product_create" component={ProductEditor} />
+										<Route exact path="/product_editor/:productId/:title" component={ProductEditor} />
 										<Route exact path="/userinfo/index" component={UserList} />
 										<Route exact path="/product/itemList" component={ProductList} />
 										<Redirect from="*" to="/" />

@@ -106,7 +106,9 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 						<Button size="small" onClick={
 							() => this.gotoProductShow(id, name)
 						}>查看</Button>
-						<Button size="small">编辑</Button>
+						<Button size="small" onClick={
+							() => this.gotoProductEdit(id, name)
+						}>编辑</Button>
 						<Button type="danger" size="small">
 							删除
 						</Button>
@@ -188,6 +190,13 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 	 */
 	public gotoProductShow(productId: number, title: string) {
 		this.props.history.push(`/product_show/${productId}/${title}`);
+	}
+
+	/**
+	 * gotoProductEdit
+	 */
+	public gotoProductEdit(productId: number, title: string) {
+		this.props.history.push(`/product_editor/${productId}/${title}`);
 	}
 
 	public render() {

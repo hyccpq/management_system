@@ -24,7 +24,7 @@ export interface ProductDispatchToProps {
 }
 
 class ProductShow extends React.Component<ProductShowProps, any> {
-	async componentWillMount() {
+	async componentDidMount() {
 		let { productId } = this.props.match.params;
 		await this.props.productShowReq(productId);
 	}
