@@ -46,12 +46,12 @@ class App extends React.Component<AppProps, State> {
 						<Route path="/product_show/:productId/:title" component={ProductShow} />
 						<Route
 							path="/"
-							render={(props) => (
+							render={() => (
 								<Layout>
 									<Switch>
 										<Route exact path="/" component={Home} />
 										<Route exact path="/product_create" component={ProductEditor} />
-										<Route exact path="/product_editor/:productId/:title" component={ProductEditor} />
+										<Route exact path="/product_edit/:productId" component={ProductEditor} />
 										<Route exact path="/userinfo/index" component={UserList} />
 										<Route exact path="/product/itemList" component={ProductList} />
 										<Redirect from="*" to="/" />

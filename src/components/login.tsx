@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Form, Icon, Input, Button, Checkbox, notification } from 'antd';
 import { FormComponentProps } from 'antd/lib/form/Form';
-import { login } from '../redux/actions';
+import { login } from '../redux/actions/login';
 import { loginFormForgot, loginFormButton } from '../style/login.css';
 import { AppState } from '../redux/reducers';
 
@@ -84,7 +84,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 	};
 
 	public render() {
-		const { userInfo, loadState } = this.props;
+		// const { userInfo, loadState } = this.props;
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<Form onSubmit={this.handleSubmit} className="login-form">

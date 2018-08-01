@@ -48,7 +48,6 @@ module.exports = {
 						loader: 'awesome-typescript-loader',
 						options: {
 							useBabel: true,
-							transpileOnly: true
 						}
 					}
 				]

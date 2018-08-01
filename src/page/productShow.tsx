@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
-import { productShowReq } from '../redux/actions';
+import { productShowReq } from '../redux/actions/productShow';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Layout, Menu, Breadcrumb } from 'antd';
 

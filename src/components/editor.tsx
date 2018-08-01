@@ -1,24 +1,19 @@
 import * as React from 'react';
 import BraftEditor from 'braft-editor';
-import { Form, Select, InputNumber, Modal, Button, Upload, Icon, Input } from 'antd';
+import { Form, InputNumber, Modal, Button, Upload, Icon, Input } from 'antd';
+import CategorySelect from '../components/categorySelect';
 import 'braft-editor/dist/braft.css';
-import { FormComponentProps } from 'antd/lib/form';
 import * as editorStyle from '../style/editor.css';
 import { UploadFile } from 'antd/lib/upload/interface';
 import axios, { AxiosResponse } from 'axios';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
-import { productShowReq } from '../redux/actions';
+import { productShowReq } from '../redux/actions/productShow';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { baseUrl } from '../conf/base';
+import { ProductEditorProps } from '../page/productEditor';
 
-export interface EditorProps
-	extends FormComponentProps,
-		ProductShowStateToProps,
-		ProductDispatchToProps,
-		RouteComponentProps<EditorProps> {
-	title: string;
-	productId: string;
-}
+export interface EditorProps extends ProductShowStateToProps, ProductDispatchToProps, RouteComponentProps<ProductEditorProps> {}
 
 export interface ProductShowStateToProps {
 	productInfo: any;
@@ -32,7 +27,8 @@ export interface EditorState {
 	previewVisible: boolean;
 	previewImage: string;
 	fileList: UploadFile[];
-	categornayId: string;
+	categoryId: number;
+	parentCategoryId: number;
 	name: string;
 	subtitle: string;
 	mainImage: string;
@@ -45,21 +41,21 @@ export interface EditorState {
 }
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 class Editor extends React.Component<EditorProps, EditorState> {
 	readonly state: EditorState = {
 		previewVisible: false,
 		previewImage: '',
 		fileList: [],
-		categornayId: '12',
+		categoryId: 0,
+		parentCategoryId: 0,
 		name: '',
 		subtitle: '',
 		mainImage: '',
 		subImages: '',
 		detail: '',
-		price: '',
-		stock: '',
+		price: '0',
+		stock: '0',
 		status: '',
 		id: ''
 	};
@@ -68,19 +64,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		super(props);
 	}
 
-	async componentWillMount() {
-		let hasNotParams = Object.keys(this.props.match.params).length;
-		if (!hasNotParams) {
-			return;
-		}
-		let { productId } = this.props.match.params;
-		console.log(productId);
+	async componentDidMount() {
 		try {
+			let hasNotParams = Object.keys(this.props.match.params).length;
+			if (!hasNotParams) {
+				return;
+			}
+			let { productId } = this.props.match.params;
 			await this.props.productShowReq(productId);
-			console.log(this.props.productInfo);
+			console.warn(this.props.productInfo);
 			let info = this.props.productInfo;
+			let fileList = info.subImages
+				? info.subImages.split(',').map((item) => {
+						return {
+							thumbUrl: baseUrl + item,
+							url: baseUrl + item,
+							uid: item,
+							name: item,
+							state: 'done'
+						};
+					})
+				: [];
 			this.setState({
-				categornayId: info.categoryId + '',
+				parentCategoryId: info.parentCategoryId,
+				categoryId: info.categoryId,
 				name: info.name,
 				subtitle: info.subtitle,
 				mainImage: info.mainImage,
@@ -89,7 +96,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
 				price: info.price,
 				stock: info.stock,
 				status: info.status,
-				id: info.id
+				id: info.id,
+				fileList
 			});
 		} catch (error) {
 			console.log(error);
@@ -107,7 +115,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 	};
 
 	public updateHandleChange = ({ file, fileList }: { file: UploadFile; fileList: EditorState['fileList'] }) => {
-		console.log(file);
 		if (file.status === 'done') {
 			if (file.response.status === 0) {
 				let newFileList = this.state.fileList;
@@ -119,28 +126,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					fileList: newFileList,
 					subImages: newFileList.map((item: UploadFile) => item.name).toString()
 				});
-				console.log(this.state.fileList, this.state.subImages);
 			}
 		} else if (file.status === 'uploading' || file.status === 'removed') {
 			this.setState({
 				fileList,
 				subImages: fileList.map((item: UploadFile) => item.name).toString()
 			});
-			console.log(this.state.subImages);
 		}
 	};
 
-	public handleSubmit = (e): void => {
-		e.preventDefault();
-		this.props.form.validateFields((err, values) => {
-			if (!err) {
-				values.subImages = this.state.subImages;
-				(values.subImages = this.state.subImages.split(',')[0]), (values.detail = this.state.detail);
-				console.log(values);
-				
-			}
-		});
-	};
+	public handleSubmit = (): void => {};
 
 	public normFile = (e) => {
 		console.log('Upload event:', e);
@@ -151,7 +146,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 	};
 
 	public handleChange = (content: string) => {
-		console.log(content);
 		this.setState({
 			detail: content
 		});
@@ -170,7 +164,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 				method: 'post',
 				data: fd
 			});
-			console.log(res);
 			if (res.data.success) {
 				this._uploadImageSuccess(defaultValue.success)(res);
 			}
@@ -209,8 +202,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 			}
 		};
 
-		const { getFieldDecorator } = this.props.form;
-
 		const formItemLayout = {
 			labelCol: { span: 6 },
 			wrapperCol: { span: 14 }
@@ -226,39 +217,24 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
 		return (
 			<div>
-				<Form onSubmit={this.handleSubmit}>
+				<Form>
 					<FormItem {...formItemLayout} label="商品名称">
 						<Input placeholder="请填入商品名称" value={this.state.name} />
 					</FormItem>
 					<FormItem {...formItemLayout} label="商品描述">
-						{getFieldDecorator('subtitle', {
-							initialValue: this.state.subtitle
-						})(<Input placeholder="请填入商品描述" />)}
+						<Input placeholder="请填入商品描述" value={this.state.subtitle} />
 					</FormItem>
 
 					<FormItem {...formItemLayout} label="选择分类">
-						{getFieldDecorator('categornayId', {
-							initialValue: this.state.categornayId
-						})(
-							<Select mode="multiple" placeholder="请选择分类">
-								<Option value="red">Red</Option>
-								<Option value="green">Green</Option>
-								<Option value="blue">Blue</Option>
-							</Select>
-						)}
+						<CategorySelect categoryId={this.state.categoryId} parentCategoryId={this.state.parentCategoryId} />
 					</FormItem>
 
 					<FormItem {...formItemLayout} label="商品售价">
-						{getFieldDecorator('price', {
-							initialValue: this.state.price
-						})(<InputNumber min={0} />)}
-
+						<InputNumber min={0} value={parseFloat(this.state.price)} />
 						<span className="ant-form-text"> 元</span>
 					</FormItem>
 					<FormItem {...formItemLayout} label="商品库存">
-						{getFieldDecorator('stock', {
-							initialValue: this.state.stock
-						})(<InputNumber min={0} />)}
+						<InputNumber min={0} value={parseInt(this.state.stock)} />
 
 						<span className="ant-form-text"> 件</span>
 					</FormItem>
@@ -274,7 +250,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 								onPreview={this.handlePreview}
 								onChange={this.updateHandleChange}
 							>
-								{fileList.length >= 3 ? null : uploadButton}
+								{fileList.length >= 5 ? null : uploadButton}
 							</Upload>
 							<Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
 								<img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -287,8 +263,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
 						</div>
 					</FormItem>
 					<FormItem wrapperCol={{ span: 12, offset: 6 }}>
-						<Button type="primary" htmlType="submit">
-							Submit
+						<Button type="primary" htmlType="submit" onClick={this.handleSubmit}>
+							提交
 						</Button>
 					</FormItem>
 				</Form>
@@ -307,4 +283,4 @@ const mapDispatchToProps: ProductDispatchToProps = {
 	productShowReq
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Form.create()(Editor)));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Editor));

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as home from '../style/home.css';
 import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
-import { statistics } from '../redux/actions';
+import { statistics } from '../redux/actions/statistic';
 import { Link } from 'react-router-dom';
 
 export interface HomeProps extends ReduxProps, ActionProps {}

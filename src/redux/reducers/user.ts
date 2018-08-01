@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { EnthusiasmAction } from '../actions';
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ERROR } from '../constans';
+import { LOGIN_SUCCESS, LOGIN_ERROR } from '../constans';
 
 const user: Reducer<{}> = (state = {}, action: EnthusiasmAction) => {
 	switch (action.type) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Table, Button, notification } from 'antd';
 import { connect } from 'react-redux';
-import { productListReq } from '../redux/actions';
+import { productListReq } from '../redux/actions/productList';
 import { AppState } from '../redux/reducers';
 import axios from '../util/axios';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -195,8 +195,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 	/**
 	 * gotoProductEdit
 	 */
-	public gotoProductEdit(productId: number, title: string) {
-		this.props.history.push(`/product_editor/${productId}/${title}`);
+	public gotoProductEdit(productId: number, title?: string) {
+		this.props.history.push(`/product_edit/${productId}`);
 	}
 
 	public render() {

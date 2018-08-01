@@ -65,6 +65,13 @@
     "@types/react" "*"
     "@types/webpack" "*"
 
+"@types/react-redux@^6.0.5":
+  version "6.0.5"
+  resolved "http://registry.npm.taobao.org/@types/react-redux/download/@types/react-redux-6.0.5.tgz#bb44679588554f3b686666c0484a960aa7a47b86"
+  dependencies:
+    "@types/react" "*"
+    redux "^4.0.0"
+
 "@types/react-router-dom@^4.2.7":
   version "4.3.0"
   resolved "http://registry.npm.taobao.org/@types/react-router-dom/download/@types/react-router-dom-4.3.0.tgz#c91796d02deb3a5b24bc1c5db4a255df0d18b8b5"
