@@ -6,20 +6,26 @@ import 'braft-editor/dist/braft.css';
 import * as editorStyle from '../style/editor.css';
 import { UploadFile } from 'antd/lib/upload/interface';
 import axios, { AxiosResponse } from 'axios';
-import { connect } from 'react-redux';
+import $http from '../util/axios';
+import { connect, DispatchProp, MapDispatchToProps } from 'react-redux';
 import { AppState } from '../redux/reducers';
 import { productShowReq } from '../redux/actions/productShow';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { baseUrl } from '../conf/base';
 import { ProductEditorProps } from '../page/productEditor';
+import { Dispatch } from 'redux';
+import { EnthusiasmAction, loadingState } from '../redux/actions';
 
-export interface EditorProps extends ProductShowStateToProps, ProductDispatchToProps, RouteComponentProps<ProductEditorProps> {}
+export interface EditorProps
+	extends ProductShowStateToProps,
+		ProductDispatchToProps,
+		RouteComponentProps<ProductEditorProps> {}
 
 export interface ProductShowStateToProps {
 	productInfo: any;
 }
 
-export interface ProductDispatchToProps {
+export interface ProductDispatchToProps extends DispatchProp {
 	productShowReq: (productId: string) => {};
 }
 
@@ -34,8 +40,8 @@ export interface EditorState {
 	mainImage: string;
 	subImages: string;
 	detail: string;
-	price: string;
-	stock: string;
+	price: number;
+	stock: number;
 	status: string;
 	id: string;
 }
@@ -51,13 +57,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		parentCategoryId: 0,
 		name: '',
 		subtitle: '',
-		mainImage: '',
+		mainImage: null,
 		subImages: '',
 		detail: '',
-		price: '0',
-		stock: '0',
-		status: '',
-		id: ''
+		price: 0,
+		stock: 0,
+		status: '1',
+		id: null
 	};
 
 	constructor(props: EditorProps) {
@@ -135,7 +141,33 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		}
 	};
 
-	public handleSubmit = (): void => {};
+	public handleSubmit = async () => {
+		let { categoryId, name, subtitle, mainImage, subImages, detail, price, stock, status, id } = this.state;
+		console.log(this.state);
+
+		try {
+			let res = await $http((state: boolean) => this.props.dispatch(loadingState(state)))({
+				method: 'GET',
+				url: '/manage/product/save.do',
+				params: {
+					categoryId,
+					name,
+					subtitle,
+					mainImage,
+					subImages,
+					detail,
+					price,
+					stock,
+					status,
+					id
+				}
+			});
+
+			console.log(res);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	public normFile = (e) => {
 		console.log('Upload event:', e);
@@ -180,8 +212,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		});
 	};
 
-	public formChange = (ev) => {
-		console.log(ev);
+	private _changeCategoryId = (firstCategory: number, secondCategory: number) => {
+		this.setState({
+			parentCategoryId: firstCategory,
+			categoryId: secondCategory
+		});
+		console.log(this.state);
+	};
+
+	public formChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
+		console.log(e);
+		let inputValue = e.currentTarget.value as EditorState[keyof EditorState];
+		let inputName = e.currentTarget.name as keyof EditorState;
+		this.setState({
+			[inputName]: inputValue
+		} as Pick<EditorState, keyof EditorState>);
+	};
+
+	public formNumChange = (inputName: 'price' | 'stock') => (num: number) => {
+		console.log(num);
+		// let inputValue = e.currentTarget.value as EditorState[keyof EditorState];
+		// let inputName = e.currentTarget.name as keyof EditorState;
+		this.setState({
+			[inputName]: num
+		} as Pick<EditorState, 'price' | 'stock'>);
 	};
 
 	public render() {
@@ -219,22 +273,41 @@ class Editor extends React.Component<EditorProps, EditorState> {
 			<div>
 				<Form>
 					<FormItem {...formItemLayout} label="商品名称">
-						<Input placeholder="请填入商品名称" value={this.state.name} />
+						<Input placeholder="请填入商品名称" value={this.state.name} onChange={this.formChange} name="name" />
 					</FormItem>
 					<FormItem {...formItemLayout} label="商品描述">
-						<Input placeholder="请填入商品描述" value={this.state.subtitle} />
+						<Input
+							placeholder="请填入商品描述"
+							value={this.state.subtitle}
+							onChange={this.formChange}
+							name="subtitle"
+						/>
 					</FormItem>
 
 					<FormItem {...formItemLayout} label="选择分类">
-						<CategorySelect categoryId={this.state.categoryId} parentCategoryId={this.state.parentCategoryId} />
+						<CategorySelect
+							categoryId={this.state.categoryId}
+							parentCategoryId={this.state.parentCategoryId}
+							changeCategory={this._changeCategoryId}
+						/>
 					</FormItem>
 
 					<FormItem {...formItemLayout} label="商品售价">
-						<InputNumber min={0} value={parseFloat(this.state.price)} />
+						<InputNumber
+							min={0}
+							value={this.state.price}
+							onChange={this.formNumChange('price')}
+							name="price"
+						/>
 						<span className="ant-form-text"> 元</span>
 					</FormItem>
 					<FormItem {...formItemLayout} label="商品库存">
-						<InputNumber min={0} value={parseInt(this.state.stock)} />
+						<InputNumber
+							min={0}
+							value={this.state.stock}
+							onChange={this.formNumChange('stock')}
+							name="stock"
+						/>
 
 						<span className="ant-form-text"> 件</span>
 					</FormItem>
@@ -250,7 +323,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 								onPreview={this.handlePreview}
 								onChange={this.updateHandleChange}
 							>
-								{fileList.length >= 5 ? null : uploadButton}
+								{fileList.length >= 8 ? null : uploadButton}
 							</Upload>
 							<Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
 								<img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -279,8 +352,11 @@ const mapStateToProps = (state: AppState): ProductShowStateToProps => {
 	};
 };
 
-const mapDispatchToProps: ProductDispatchToProps = {
-	productShowReq
+const mapDispatchToProps = (dispatch: Dispatch<EnthusiasmAction>): ProductDispatchToProps => {
+	return {
+		productShowReq: (productId: string) => productShowReq(productId)(dispatch),
+		dispatch
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Editor));

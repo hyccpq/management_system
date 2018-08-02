@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Editor from '../components/editor';
-import { RouteComponentProps } from '../../node_modules/@types/react-router';
 
 export interface ProductEditorProps {
 	productId: string;
