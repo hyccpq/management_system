@@ -52,7 +52,7 @@ class App extends React.Component<AppProps, State> {
 										<Route exact path="/" component={Home} />
 										<Route exact path="/product_create" component={ProductEditor} />
 										<Route exact path="/product_edit/:productId" component={ProductEditor} />
-										<Route exact path="/userinfo/index" component={UserList} />
+										<Route exact path="/client_info/index" component={UserList} />
 										<Route exact path="/product/itemList" component={ProductList} />
 										<Redirect from="*" to="/" />
 									</Switch>

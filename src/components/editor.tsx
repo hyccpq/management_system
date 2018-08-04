@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BraftEditor from 'braft-editor';
-import { Form, InputNumber, Modal, Button, Upload, Icon, Input } from 'antd';
+import { Form, InputNumber, Modal, Button, Upload, Icon, Input, notification } from 'antd';
 import CategorySelect from '../components/categorySelect';
 import 'braft-editor/dist/braft.css';
 import * as editorStyle from '../style/editor.css';
@@ -144,7 +144,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
 	public handleSubmit = async () => {
 		let { categoryId, name, subtitle, mainImage, subImages, detail, price, stock, status, id } = this.state;
 		console.log(this.state);
-
+		
+		if(!(categoryId && name && subtitle && subImages.length && detail && price && stock)) {
+			notification.warn({
+				description: '警告',
+				message: '请填写完整信息'
+			})
+			return;
+		}
 		try {
 			let res = await $http((state: boolean) => this.props.dispatch(loadingState(state)))({
 				method: 'GET',
@@ -162,8 +169,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					id
 				}
 			});
+			notification.success({
+				description: '成功',
+				message: '操作成功'
+			})
 
 			console.log(res);
+			this.props.history.push('/product/itemList');
 		} catch (error) {
 			console.error(error);
 		}
@@ -315,7 +327,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					<FormItem {...formItemLayout} label="上传图片">
 						<div className="clearfix">
 							<Upload
-								action="manage/product/upload.do"
+								action="/manage/product/upload.do"
 								name="upload_file"
 								listType="picture-card"
 								fileList={fileList}

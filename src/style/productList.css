@@ -1,0 +1,16 @@
+.title {
+    float: left;
+}
+
+.add-button {
+    float: right;
+    margin-top: 5px;
+}
+
+.all-title-content:after {
+    display: block;
+    clear: both;
+    content: '';
+    visibility: hidden;
+    height: 0;
+}

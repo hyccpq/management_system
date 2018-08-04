@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Table, Button, notification } from 'antd';
+import { Table, Button, notification, Icon } from 'antd';
 import { connect } from 'react-redux';
 import { productListReq } from '../redux/actions/productList';
 import { AppState } from '../redux/reducers';
 import axios from '../util/axios';
 import { withRouter, RouteComponentProps } from 'react-router';
+import * as proList from '../style/productList.css';
 
 export interface ProductListState {
 	data: {}[];
@@ -66,7 +67,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 				title: '状态',
 				dataIndex: 'status',
 				width: 80,
-				render: (status: number, { id }: { id: number}) => (
+				render: (status: number, { id }: { id: number }) => (
 					<span>
 						{status === 1 ? (
 							<span>
@@ -101,14 +102,14 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 				title: '操作',
 				dataIndex: 'categoryId',
 				width: 180,
-				render: (categoryId: number, { id, name }: { id: number, name: string }) => (
+				render: (categoryId: number, { id, name }: { id: number; name: string }) => (
 					<span>
-						<Button size="small" onClick={
-							() => this.gotoProductShow(id, name)
-						}>查看</Button>
-						<Button size="small" onClick={
-							() => this.gotoProductEdit(id, name)
-						}>编辑</Button>
+						<Button size="small" onClick={() => this.gotoProductShow(id, name)}>
+							查看
+						</Button>
+						<Button size="small" onClick={() => this.gotoProductEdit(id, name)}>
+							编辑
+						</Button>
 						<Button type="danger" size="small">
 							删除
 						</Button>
@@ -145,7 +146,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 				notification.success({
 					message: '成功',
 					description: res.data.data
-				})
+				});
 			} else {
 				notification.error({
 					message: '错误',
@@ -161,7 +162,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		this.setState({
 			currentPage: page,
 			currentSize: pageSize
-		})
+		});
 		this.requestList(pageSize, page);
 	};
 
@@ -169,7 +170,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		this.setState({
 			currentPage: current,
 			currentSize: pageSize
-		})
+		});
 		this.requestList(pageSize, current);
 	};
 
@@ -199,11 +200,24 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		this.props.history.push(`/product_edit/${productId}`);
 	}
 
+	/**
+	 * toCreateProd
+	 */
+	public toCreateProd = () => {
+		this.props.history.push('/product_create');
+	}
+
 	public render() {
 		let { data, columns, total } = this.state;
 		return (
 			<div>
-				<h1>商品列表页</h1>
+				<div className={proList.allTitleContent}>
+					<h1 className={proList.title}>商品列表页</h1>
+					<Button className={proList.addButton} type="primary" size="large" onClick={this.toCreateProd}>
+						<Icon type="file-add" />添加新商品
+					</Button>
+				</div>
+
 				<Table
 					columns={columns}
 					dataSource={data}

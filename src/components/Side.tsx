@@ -19,13 +19,21 @@ class MySide extends React.Component<MySideProps, State> {
 	}
 	
 	constructor (props) {
-		super(props);
+		super(props);	
 	}
 
-	componentDidMount() {
+	componentWillMount () {
+		this.updateSelectMenu();
+	}
+
+	/**
+	 * updateSelectMenu
+	 */
+	public updateSelectMenu() {
 		let url: string = window.location.pathname;
 		let urlArr = url.split('/');
 		let selectKey: string[] = [];
+		
 		if(urlArr.length > 1) {
 			for (let i = 1; i < urlArr.length; i++) {
 				selectKey.push('/' + urlArr[i]);
@@ -37,6 +45,12 @@ class MySide extends React.Component<MySideProps, State> {
 			select: selectKey,
 			openKey: [selectKey[0]],
 		})
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.location.pathname !== this.props.location.pathname) {
+			this.updateSelectMenu();
+		}
 	}
 
     private onCollapse = (collapsed: boolean) => {
@@ -71,7 +85,7 @@ class MySide extends React.Component<MySideProps, State> {
 				style={{ padding: '48px 0' }}
 			>
 				<div className="logo" />
-				<Menu theme="dark" defaultSelectedKeys={select} defaultOpenKeys={openKey} mode="inline" onClick={ this.pageTab }>
+				<Menu theme="dark" selectedKeys={select} defaultOpenKeys={openKey} mode="inline" onClick={ this.pageTab }>
 					<Menu.Item key="/">
 						<Icon type="home" />
 						<span>首页</span>
@@ -81,7 +95,7 @@ class MySide extends React.Component<MySideProps, State> {
 						<span>新建 & 编辑产品信息</span>
 					</Menu.Item>
 					<SubMenu
-						key="/userinfo"
+						key="/client_info"
 						title={
 							<span>
 								<Icon type="user" />

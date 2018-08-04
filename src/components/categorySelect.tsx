@@ -39,6 +39,7 @@ export interface CategorySelectState {
 	firstCategoryId: number;
 	secondValue: '';
 	secondCategoryId: number;
+	firstDisable: boolean;
 }
 
 const Option = Select.Option;
@@ -53,7 +54,8 @@ class CategorySelect extends React.Component<CategorySelectProps, CategorySelect
 		firstValue: '',
 		firstCategoryId: 0,
 		secondValue: '',
-		secondCategoryId: 0
+		secondCategoryId: 0,
+		firstDisable: true
 	};
 
 	constructor(props: CategorySelectProps) {
@@ -63,9 +65,10 @@ class CategorySelect extends React.Component<CategorySelectProps, CategorySelect
 	async componentDidMount() {
 		try {
 			await this.props.categoryReq();
-			if (!Object.keys(this.props.match.params).length) {
+			if (!Object.keys(this.props.match.params).length || !this.props.categoryId) {
 				this.setState({
-					firstCategoryAll: this.props.categoryInfo
+					firstCategoryAll: this.props.categoryInfo,
+					firstDisable: false
 				})
 				return;
 			}
@@ -73,7 +76,8 @@ class CategorySelect extends React.Component<CategorySelectProps, CategorySelect
 				{
 					firstCategoryAll: this.props.categoryInfo,
 					firstCategoryId: this.props.parentCategoryId,
-					secondCategoryId: this.props.categoryId
+					secondCategoryId: this.props.categoryId,
+					firstDisable: false
 				},
 				this.getSecondAll
 			);
@@ -94,6 +98,7 @@ class CategorySelect extends React.Component<CategorySelectProps, CategorySelect
 				);
 			} else {
 				await this.props.categoryReq(this.state.firstCategoryId);
+				if(this.state.secondCategoryAll.length)return;
 				this.setState({
 					secondCategoryAll: this.props.categoryInfo
 				}, this.toParentCategory);
@@ -134,13 +139,16 @@ class CategorySelect extends React.Component<CategorySelectProps, CategorySelect
 			firstCategoryId,
 			secondCategoryAll,
 			secondCategoryId,
-			secondValue
+			secondValue,
+			firstDisable
 		} = this.state;
 		return (
 			<div>
 				<Select
+					showSearch
 					placeholder="请选择分类"
-					value={firstCategoryId}
+					disabled={firstDisable}
+					value={firstCategoryId ? firstCategoryId : ''}
 					style={{ width: '50%' }}
 					onChange={this.handleFirstSelectChange}
 				>
