@@ -4,6 +4,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HappyPack = require('happypack');
+const WebpackBar = require('webpackbar');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length - 1 });
 console.log(os.cpus().length);
@@ -168,6 +169,7 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].[hash:8].css',
 			chunkFilename: '[id].[hash:8].css'
-		})
+		}),
+		new WebpackBar()
 	]
 };

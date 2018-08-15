@@ -4,8 +4,9 @@ import { AppState } from '../redux/reducers';
 import { productShowReq } from '../redux/actions/productShow';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Layout, Menu, Breadcrumb } from 'antd';
+import * as productShowStyle from '../style/produtShow.css';
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
 export interface ProductShowProps
 	extends ProductShowStateToProps,
@@ -24,9 +25,26 @@ export interface ProductDispatchToProps {
 }
 
 class ProductShow extends React.Component<ProductShowProps, any> {
-	async componentDidMount() {
+	readonly state = {
+		mainImageUri: '',
+		index: 0
+	}
+
+	public async componentDidMount() {
 		let { productId } = this.props.match.params;
+		
 		await this.props.productShowReq(productId);
+		console.warn(productId)
+		this.setState({
+			mainImageUri: this.props.productInfo.mainImage
+		})
+	}
+
+	public activeImage(index: number, uri: string) {
+		this.setState({
+			mainImageUri: uri,
+			index
+		})
 	}
 
 	public render() {
@@ -35,25 +53,52 @@ class ProductShow extends React.Component<ProductShowProps, any> {
         
 		return (
 			<Layout className="layout">
-				<Header>
-					<div className="logo" />
-					<Menu theme="dark" mode="horizontal" defaultSelectedKeys={[ '2' ]} style={{ lineHeight: '64px' }}>
-						<Menu.Item key="1">nav 1</Menu.Item>
-						<Menu.Item key="2">nav 2</Menu.Item>
-						<Menu.Item key="3">nav 3</Menu.Item>
-					</Menu>
-				</Header>
-				<Content style={{ padding: '0 50px' }}>
+				<Content className={productShowStyle.all}>
 					<Breadcrumb style={{ margin: '16px 0' }}>
 						<Breadcrumb.Item>Home</Breadcrumb.Item>
 						<Breadcrumb.Item>List</Breadcrumb.Item>
 						<Breadcrumb.Item>App</Breadcrumb.Item>
 					</Breadcrumb>
-					<div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        <h1>{productInfo.name}</h1>
-                        <p>{productInfo.updateTime}</p>
+					<div className={productShowStyle.content}>
+						<section className={productShowStyle.show}>
+							<div className={productShowStyle.showOneImage}>
+								<img className={productShowStyle.oneImage} src={this.state.mainImageUri ? (productInfo.imageHost + this.state.mainImageUri) : ''} alt="" />
+							</div>
+							<div className={productShowStyle.subImages}>
+								{
+									productInfo.subImages ? productInfo.subImages.split(',').map((item, index) => {
+											return (
+												<div 
+													key={index} 
+													className={productShowStyle.showSubImages} 
+													style={this.state.index === index ? {border: '2px solid #c75'} : null}
+													onClick={() => this.activeImage(index, item)}
+												>
+													<img 
+														src={productInfo.imageHost + item} 
+														className={productShowStyle.imageShow} 
+														alt="" 
+													/>
+												</div>
+											)
+										}
+									) : null
+								}
+							</div>
+						</section>
+						<div className={productShowStyle.titleAndInfo}>
+							<h1>{productInfo.name}</h1>
+							<p>{productInfo.updateTime}</p>
+                    		<h2>{productInfo.subtitle}</h2>
+                    		<p>价格： {productInfo.price}</p>
+                    		<p>库存： {productInfo.stock}</p>
+                    		<p>状态： {productInfo.status === 1 ? '在售' : '已下架'} </p>
+						</div>
+					</div>
+                        
+                        
                         <article dangerouslySetInnerHTML={{__html: productInfo.detail}}></article>
-                    </div>
+                    
 				</Content>
 				<Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
 			</Layout>
