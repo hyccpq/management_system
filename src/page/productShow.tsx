@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
 import { productShowReq } from '../redux/actions/productShow';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import * as productShowStyle from '../style/produtShow.css';
 
@@ -49,15 +50,18 @@ class ProductShow extends React.Component<ProductShowProps, any> {
 
 	public render() {
         let { productInfo } = this.props;
-        console.log(productInfo);
         
 		return (
 			<Layout className="layout">
 				<Content className={productShowStyle.all}>
 					<Breadcrumb style={{ margin: '16px 0' }}>
-						<Breadcrumb.Item>Home</Breadcrumb.Item>
-						<Breadcrumb.Item>List</Breadcrumb.Item>
-						<Breadcrumb.Item>App</Breadcrumb.Item>
+						<Breadcrumb.Item>
+							<Link to="/">首页</Link>
+						</Breadcrumb.Item>
+						<Breadcrumb.Item>
+						 	<Link to="/product/itemList">商品列表</Link>
+						</Breadcrumb.Item>
+						<Breadcrumb.Item>{productInfo.name}</Breadcrumb.Item>
 					</Breadcrumb>
 					<div className={productShowStyle.content}>
 						<section className={productShowStyle.show}>

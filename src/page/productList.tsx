@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Table, Button, notification, Icon } from 'antd';
+import { Table, Button, notification, Icon, Input } from 'antd';
 import { connect } from 'react-redux';
-import { productListReq } from '../redux/actions/productList';
+import { productListReq, Product } from '../redux/actions/productList';
 import { AppState } from '../redux/reducers';
 import axios from '../util/axios';
 import { withRouter, RouteComponentProps } from 'react-router';
 import * as proList from '../style/productList.css';
+
+const Search = Input.Search
 
 export interface ProductListState {
 	data: {}[];
@@ -13,6 +15,8 @@ export interface ProductListState {
 	total: number;
 	currentPage: number;
 	currentSize: number;
+	serach: string;
+	prewSerach: string;
 }
 
 export interface ProductListProps extends StateProps, DispatchProps, RouteComponentProps<ProductListProps> {}
@@ -22,7 +26,7 @@ export interface StateProps {
 }
 
 export interface DispatchProps {
-	productListReq: (pageSize?: number, pageNum?: number) => {};
+	productListReq: (pageSize?: number, pageNum?: number, product?: Product) => {};
 }
 
 const mapStateToProps = (state: AppState): StateProps => {
@@ -41,6 +45,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		total: 0,
 		currentPage: 1,
 		currentSize: 10,
+		serach: '',
+		prewSerach: '',
 		columns: [
 			{
 				title: '编号',
@@ -142,7 +148,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			});
 			console.log(res);
 			if (res.data.status === 0) {
-				await this.requestList(this.state.currentSize, this.state.currentPage);
+				// await this.requestList(this.state.currentSize, this.state.currentPage);
+				await this.serachList(this.state.currentSize, this.state.currentPage, this.state.serach);
 				notification.success({
 					message: '成功',
 					description: res.data.data
@@ -163,7 +170,8 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			currentPage: page,
 			currentSize: pageSize
 		});
-		this.requestList(pageSize, page);
+		// this.requestList(pageSize, page);
+		this.serachList(pageSize, page, this.state.serach);
 	};
 
 	private onShowSizeChange = (current: number, pageSize: number) => {
@@ -171,15 +179,15 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 			currentPage: current,
 			currentSize: pageSize
 		});
-		this.requestList(pageSize, current);
+		// this.requestList(pageSize, current);
+		this.serachList(pageSize, current, this.state.serach);
 	};
 
 	/**
      * requestList
      */
-	public async requestList(pageSize?: number, pageNum?: number) {
-		await this.props.productListReq(pageSize, pageNum);
-
+	public async requestList(pageSize?: number, pageNum?: number, product?: Product) {
+		await this.props.productListReq(pageSize, pageNum, product);
 		this.setState({
 			data: this.props.productList.list,
 			total: this.props.productList.total
@@ -207,6 +215,26 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 		this.props.history.push('/product_create');
 	}
 
+	public async serachList (pageSize: number, pageNum: number, value: string) {
+		this.setState({
+			serach: value,
+			prewSerach: value
+		})
+		if(!value) {
+			await this.requestList(pageSize, pageNum)
+		} else if(Number.isNaN(Number(value))) {
+			await this.requestList(pageSize, pageNum, { productName: value })
+		} else {
+			await this.requestList(pageSize, pageNum, { productId: Number(value) })
+		}
+	}
+
+	public serachInput = (e) => {
+		if(this.state.prewSerach && !e.target.value){
+			this.requestList(this.state.currentSize, this.state.currentPage)
+		}
+	}
+
 	public render() {
 		let { data, columns, total } = this.state;
 		return (
@@ -217,6 +245,13 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 						<Icon type="file-add" />添加新商品
 					</Button>
 				</div>
+				<Search
+					placeholder="输入想要搜索的商品名或者ID"
+					enterButton="Search"
+					size="large"
+					onSearch={value => this.serachList(this.state.currentSize, this.state.currentPage, value)}
+					onChange={this.serachInput}
+			    />
 
 				<Table
 					columns={columns}
