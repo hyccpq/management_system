@@ -23,7 +23,7 @@
 }
 
 .subImages {
-	/*background-color: #C75;*/
+	min-height: 80px;
 }
 
 .subImages:after {
@@ -53,11 +53,14 @@
 .show-one-image {
 	width: 480px;
 	height: 480px;
+	overflow: hidden;
+	position: relative;
 }
 
 .one-image {
 	width: 100%;
 	height: 100%;
+	position: absolute;
 }
 
 .title-and-info {

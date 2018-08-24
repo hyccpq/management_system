@@ -6,8 +6,6 @@ import { connect } from 'react-redux';
 import { AppState } from '../redux/reducers';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { ProductEditorProps } from '../page/productEditor';
-import { resolve } from 'path';
-import { rejects } from 'assert';
 
 export interface CategorySelectProps
 	extends CategoryDispatchToProps,
