@@ -106,6 +106,17 @@ class MySide extends React.Component<MySideProps, State> {
 						<Menu.Item key="/index">用户管理</Menu.Item>
 					</SubMenu>
 					<SubMenu
+						key="/order"
+						title={
+							<span>
+								<Icon type="user" />
+								<span>订单管理</span>
+							</span>
+						}
+					>
+						<Menu.Item key="/orderList">订单列表</Menu.Item>
+					</SubMenu>
+					<SubMenu
 						key="/product"
 						title={
 							<span>

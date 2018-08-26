@@ -29,6 +29,7 @@ const UserList = Loadable({loader: () => import('./page/userList'), loading: () 
 const ProductList = Loadable({loader: () => import('./page/productList'), loading: () => null});
 const ProductEditor = Loadable({loader: () => import('./page/productEditor'), loading: () => null});
 const ProductShow = Loadable({loader: () => import('./page/productShow'), loading: () => null});
+const OrderList = Loadable({loader: () => import('./page/orderList'), loading: () => null})
 // const Login = Loadable({loader: () => import('./page/loginPage'), loading: null});
 
 class App extends React.Component<AppProps, State> {
@@ -54,6 +55,7 @@ class App extends React.Component<AppProps, State> {
 										<Route exact path="/product_edit/:productId" component={ProductEditor} />
 										<Route exact path="/client_info/index" component={UserList} />
 										<Route exact path="/product/itemList" component={ProductList} />
+										<Route exact path="/order/orderList" component={OrderList} />
 										<Redirect from="*" to="/" />
 									</Switch>
 								</Layout>

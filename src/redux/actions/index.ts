@@ -41,6 +41,11 @@ export interface UserInfoSuccess {
 	data: {list: {}[], total: number};
 }
 
+export interface OrderListSuccess {
+	type: contents.ORDER_LIST_SUCCESS;
+	data: {};
+}
+
 export type EnthusiasmAction = LoginSuccess | 
 								LoginError | 
 								LoadingState | 
@@ -48,7 +53,8 @@ export type EnthusiasmAction = LoginSuccess |
 								UserInfoSuccess | 
 								ProductListSuccess | 
 								ProductShowSuccess |
-								CategorySuccess;
+								CategorySuccess|
+								OrderListSuccess;
 
 export const loadingState = (state: boolean): LoadingState => {
 	return {
